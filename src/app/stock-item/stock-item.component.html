@@ -1,0 +1,75 @@
+<div class="stock-container py-5">
+  <div class="container mt-4">
+
+    <div class="mb-5">
+      <h2 class="fw-bold text-dark mb-1 text-uppercase tracking-wider">Inventario de Stock</h2>
+      <p class="text-muted small mb-0">Administra los artículos globales y niveles de existencias de Payibox GYM</p>
+    </div>
+
+    <div *ngIf="cargando" class="text-center my-5">
+      <div class="spinner-border text-warning" role="status"></div>
+    </div>
+
+    <div *ngIf="!cargando">
+      <div *ngFor="let item of inventario" class="stock-card bg-white rounded-3 p-4 mb-4 shadow-sm">
+
+        <div class="row align-items-center mb-3 pb-3 border-bottom border-light-subtle">
+          <div class="col-6 col-md-3">
+            <span class="text-uppercase text-muted x-small d-block fw-semibold mb-1">Categoría</span>
+            <span class="fw-bold text-dark text-uppercase small">{{ item.category?.name || 'Suplemento' }}</span>
+          </div>
+          <div class="col-6 col-md-3">
+            <span class="text-uppercase text-muted x-small d-block fw-semibold mb-1">Precio Base</span>
+            <span class="fw-bold text-dark">${{ getNumero(item.price) | number:'1.2-2' }}</span>
+          </div>
+          <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0">
+            <span class="text-muted small fw-semibold">ID: PBX-000{{ item.id }}</span>
+          </div>
+        </div>
+
+        <div class="row align-items-center">
+
+          <div class="col-12 col-md-5 d-flex align-items-center mb-3 mb-md-0">
+            <img [src]="item.image || 'assets/cart-placeholder.png'"
+              class="rounded-3 me-3 border border-light-subtle shadow-sm"
+              style="width: 55px; height: 55px; object-fit: cover;">
+            <div>
+              <h5 class="fw-bold text-dark mb-1 fs-6">{{ item.name }}</h5>
+
+              <span class="status-badge" [ngClass]="{
+                'status-disponible': item.stock > 10,
+                'status-bajo': item.stock <= 10 && item.stock > 0,
+                'status-agotado': item.stock === 0
+              }">
+                {{ item.stock === 0 ? 'AGOTADO' : item.stock <= 10 ? 'BAJO STOCK' : 'DISPONIBLE' }} </span>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-4 d-flex justify-content-md-center align-items-center">
+            <div class="input-group justify-content-start justify-content-md-center align-items-center">
+              <button (click)="ajustarStock(item, -1)" class="btn btn-stock-adjust me-2 shadow-sm"
+                [disabled]="item.stock <= 0">-</button>
+              <span class="fw-bold fs-5 mx-2 text-dark text-center" style="min-width: 30px;">{{ item.stock }}</span>
+              <button (click)="ajustarStock(item, 1)" class="btn btn-stock-adjust ms-2 shadow-sm">+</button>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 text-end">
+            <button (click)="eliminarItem(item.id)"
+              class="btn-delete-minimal text-danger bg-transparent border-0 fw-semibold p-0">
+              <i class="bi bi-trash3-fill me-1"></i> Eliminar
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div *ngIf="inventario.length === 0"
+        class="text-center py-5 bg-white rounded-3 shadow-sm border border-light-subtle">
+        <p class="text-muted mb-0">No hay artículos registrados en el stock de Payibox.</p>
+      </div>
+    </div>
+
+  </div>
+</div>

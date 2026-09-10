@@ -1,0 +1,25 @@
+/* Limita el tamaño del logo para que no se vea gigante como en la captura */
+.brand-logo {
+    height: 40px; 
+    width: auto;
+    object-fit: contain;
+}
+
+.custom-navbar {
+    background-color: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(10px);
+    height: 70px; /* Altura estándar de tu navbar original */
+}
+
+/* Estilo del botón amarillo de Payibox */
+.btn-payibox-login {
+    background-color: #ffc107;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.brand-text {
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+    color: white;
+}

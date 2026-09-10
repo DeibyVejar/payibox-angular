@@ -1,0 +1,68 @@
+/* src/app/CarComponents/Car.Component.css */
+.payibox-card {
+  background-color: var(--payibox-card);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03); /* Sombra muy sutil */
+  border: 1px solid #f0f0f0;
+}
+
+.product-name {
+  color: var(--payibox-text-main);
+  font-weight: 600;
+}
+
+.product-category {
+  color: var(--payibox-text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+}
+
+/* El control de cantidad minimalista de la imagen */
+.qty-selector {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 100px;
+}
+
+.qty-selector button {
+  background: none;
+  border: none;
+  color: var(--payibox-text-main);
+  font-weight: bold;
+  padding: 8px 12px;
+  transition: background-color 0.2s;
+}
+
+.qty-selector button:hover {
+  background-color: #f8fafc;
+}
+
+.qty-selector span {
+  color: var(--payibox-text-main);
+  font-size: 0.9rem;
+}
+
+/* Color Amarillo Payibox para el Total y el Botón Final */
+.text-warning, .btn-warning {
+  color: var(--payibox-text-main) !important; /* Texto oscuro sobre amarillo */
+}
+
+/* Car.Component.css */
+:host {
+  display: block;
+  background-color: #f8f9fa !important; /* Fuerza el fondo gris claro */
+}
+
+.text-warning {
+  color: #ffc107 !important; /* El amarillo Payibox */
+}
+
+.card {
+  transition: all 0.2s ease;
+}
+
+/* Esto quita el subrayado azul de los botones de basura */
+.btn-link {
+  text-decoration: none;
+}

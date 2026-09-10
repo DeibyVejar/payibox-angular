@@ -1,0 +1,104 @@
+/* Navbar.Component.css */
+
+/* Estilo general de la barra (Negro mate fijo arriba) */
+.custom-navbar {
+  background-color: #212529 !important; /* El color de fondo de la tercera imagen */
+  border-bottom: 1px solid #333; /* Línea sutil inferior */
+  padding: 1.2rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Sombra suave */
+  
+}
+
+/* Estilo del Logo y Texto de la marca */
+.brand-logo {
+  height: 35px; /* Ajusta el tamaño del icono según tu imagen */
+  width: auto;
+}
+
+.brand-text {
+  font-size: 1.3rem;
+  color: #fff !important;
+  letter-spacing: 1px;
+}
+
+/* Estilo de los enlaces centrales */
+.custom-navbar .nav-link {
+  color: #aaa !important; /* Gris suave para los enlaces */
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.custom-navbar .nav-link:hover {
+  color: #e4ca09 !important; /* Blanco al pasar el mouse */
+}
+
+/* Estilo del BOTÓN AMARILLO REDONDO (Clave) */
+.btn-payibox-login {
+  background-color: #ffc107; /* Amarillo de PrimeNG/Bootstrap */
+  border-radius: 25px; /* Redondeado idéntico a la imagen */
+  border: none;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-payibox-login:hover {
+  background-color: #e0a800; /* Amarillo más oscuro al pasar el mouse */
+}
+
+/* Busca la clase de tu Navbar superior, ej: .navbar, .header-container, etc. */
+.navbar {
+  position: relative; /* Asegura que el navbar sea la referencia */
+  overflow: visible !important; /* CAMBIO CLAVE: Permite que el logo se vea aunque sobresalga */
+  z-index: 100; /* Dale un z-index alto para que esté por encima de todo */
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #121212;
+}
+
+.navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    margin: 0 !important; /* Elimina cualquier margen residual */
+    padding: 0.5rem 1rem; /* Ajusta el padding interno, no el margen */
+    border: none !important;
+    height: 70px; /* Define una altura fija para poder calcular el pegado */
+}
+
+/* 1. Mantiene el icono de perfil blanco y nítido */
+.dropdown-toggle i.bi-person-circle {
+    color: white !important; /* Forzamos el blanco */
+    transition: all 0.2s ease;
+}
+
+/* 2. Mantiene el nombre blanco */
+.dropdown-toggle span {
+    color: white !important;
+    font-weight: 500;
+}
+
+/* 3. Estilo del Dropdown Menu (ya se ve bien en tu captura) */
+.dropdown-menu.bg-dark {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding: 10px 0;
+}
+
+/* 4. Efecto de Hover DENTRO del menú (no en el botón) */
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.05); /* Un gris muy sutil */
+    color: #ffc107 !important; /* El amarillo de tu marca */
+}
+
+/* 5. Asegurar que 'Cerrar Sesión' mantenga su color rojo */
+.dropdown-item.text-danger:hover {
+    background-color: rgba(220, 53, 69, 0.1); /* Fondo rojo sutil al hover */
+    color: #dc3545 !important;
+}

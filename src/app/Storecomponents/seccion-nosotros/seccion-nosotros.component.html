@@ -1,0 +1,21 @@
+<section class="nosotros-container">
+  <h2>Nuestra Historia</h2>
+  
+  <div class="linea-tiempo">
+    <button *ngFor="let hito of hitos; let i = index" 
+            (click)="abrirDetalle(i)"
+            [class.active]="hitoSeleccionado === i">
+      <i class="bi {{hito.icono}}"></i>
+    </button>
+  </div>
+
+  <div class="contenido-hito">
+    <div class="imagen-wrapper">
+      <img [src]="hitos[hitoSeleccionado].imagen" [alt]="hitos[hitoSeleccionado].titulo">
+    </div>
+    <div class="texto-wrapper">
+      <h3>{{ hitos[hitoSeleccionado].titulo }}</h3>
+      <p>{{ hitos[hitoSeleccionado].texto }}</p>
+    </div>
+  </div>
+</section>

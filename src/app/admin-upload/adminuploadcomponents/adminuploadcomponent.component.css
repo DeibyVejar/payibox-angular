@@ -1,0 +1,137 @@
+/* Usamos :host para aislar el componente y asegurar que los estilos no se filtren ni se vean afectados */
+:host {
+  display: block;
+  z-index: 9999;
+}
+
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.modal-content {
+  background: #ffffff !important;
+  padding: 30px !important;
+  border-radius: 20px !important;
+  width: 90% !important;
+  max-width: 450px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+  /* Forzamos el color de fuente */
+  color: #333 !important;
+  border: 1px solid #ccc !important;
+}
+
+.input-field {
+  width: 100% !important;
+  padding: 12px !important;
+  margin-bottom: 15px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 10px !important;
+  box-sizing: border-box !important;
+  display: block !important;
+}
+
+.opciones-cat { 
+  display: flex !important; 
+  gap: 10px !important; 
+  margin: 10px 0 !important; 
+}
+
+.chip {
+  padding: 8px 12px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 20px !important;
+  cursor: pointer !important;
+  background: #f8f8f8 !important;
+}
+
+.chip.selected {
+  background: #ffc107 !important;
+  border-color: #ffc107 !important;
+  font-weight: bold !important;
+}
+
+.btn-publicar {
+  width: 100% !important;
+  padding: 15px !important;
+  background: #ffc107 !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+}
+
+/* Contenedor del botón de archivo */
+.file-upload-wrapper {
+  margin: 15px 0;
+  text-align: center;
+}
+
+/* El botón de subir imagen: Estilo secundario elegante */
+.btn-file-upload {
+  display: inline-block;
+  width: 100%;
+  padding: 12px;
+  background-color: #f8f9fa; /* Color gris muy claro */
+  border: 2px dashed #ccc;   /* Borde punteado para indicar acción */
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #555;
+  transition: all 0.3s ease;
+}
+
+.btn-file-upload:hover {
+  background-color: #e9ecef;
+  border-color: #ffc107;
+  color: #333;
+}
+
+/* Imagen de vista previa más profesional */
+.preview-img {
+  margin-top: 10px;
+  width: 80px;
+  height: 80px;
+  object-fit: cover; /* Recorta la imagen para que siempre se vea bien */
+  border-radius: 8px;
+  border: 2px solid #ffc107;
+}
+
+/* Espaciado reservado para el mensaje de error */
+.error-wrapper {
+  height: 20px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.error-msg {
+  color: #d9534f;
+  font-size: 0.70rem;
+  font-weight: 600;
+  padding-left: 5px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Animación sutil al aparecer el error */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Borde rojo suave si hay error en el campo */
+.input-field.ng-invalid.ng-touched {
+  border: 1.5px solid #d9534f !important;
+}
+
+/* Estilo para los chips cuando la categoría no ha sido seleccionada */
+.opciones-cat.ng-invalid.ng-touched .chip {
+  border: 1.5px solid #d9534f !important;
+  color: #d9534f;
+}

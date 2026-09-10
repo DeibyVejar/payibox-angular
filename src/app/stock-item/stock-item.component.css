@@ -1,0 +1,84 @@
+/* Contenedor principal con el fondo claro oficial de Payibox */
+.stock-container {
+  background-color: #f8f9fa; 
+  min-height: calc(100vh - 76px);
+  margin-top: 76px;
+}
+
+/* Tarjetas idénticas a tus bloques de facturas */
+.stock-card {
+  border: 1px solid #eef0f2 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stock-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.x-small {
+  font-size: 0.72rem;
+  letter-spacing: 0.5px;
+}
+
+.tracking-wider {
+  letter-spacing: 1px;
+}
+
+/* Estilo de los Badges Planos (Simulando tu dropdown select) */
+.status-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+.status-disponible {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+}
+
+.status-bajo {
+  background-color: #fffde7;
+  color: #f57f17;
+}
+
+.status-agotado {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Botones circulares/suaves para cambiar unidades */
+.btn-stock-adjust {
+  border: 1px solid #dee2e6;
+  background-color: #ffffff;
+  color: #212529;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn-stock-adjust:hover:not(:disabled) {
+  background-color: #212529;
+  color: #ffffff;
+  border-color: #212529;
+}
+
+/* Botón eliminar ultra sutil */
+.btn-delete-minimal {
+  font-size: 0.88rem;
+  transition: opacity 0.2s;
+}
+
+.btn-delete-minimal:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}

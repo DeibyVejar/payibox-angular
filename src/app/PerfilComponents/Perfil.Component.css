@@ -1,0 +1,44 @@
+/* Botón principal estilo Amazon de la captura */
+.btn-amazon {
+  background-color: #ffc107 !important;
+  border: none !important;
+  color: #111111 !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.btn-amazon:hover {
+  background-color: #e0a800 !important;
+}
+
+/* Entrada de datos suave */
+.form-control {
+  font-size: 0.95rem;
+  color: #212529 !important;
+}
+
+.form-control::placeholder {
+  color: #adb5bd;
+}
+
+/* Badge suave de estado 'espera' de tu captura */
+.btn-warning-soft {
+  background-color: #fff3cd !important;
+  color: #856404 !important;
+  font-weight: 500;
+}
+
+/* Detalles pequeños */
+.font-xs {
+  font-size: 0.75rem !important;
+}
+
+.style-meta {
+  font-size: 0.75rem;
+  letter-spacing: 0.3px;
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}

@@ -1,0 +1,70 @@
+<div class="container-fluid bg-light min-vh-100 py-5">
+  <div class="container">
+    
+    <div *ngIf="cartService.totalItems() > 0; else emptyCart">
+      
+      <h2 class="mb-4 fw-bold text-dark">TU CARRITO <span class="text-warning">PAYIBOX</span></h2>
+      
+      <div class="row">
+        
+        <div class="col-lg-8">
+          <div *ngFor="let item of cartService.items()" 
+               class="card border-0 shadow-sm mb-3 rounded-4 bg-white p-3">
+            <div class="card-body p-0">
+              <div class="row align-items-center">
+                <div class="col-2">
+                  <img [src]="item.image" [alt]="item.name" class="img-fluid rounded-3" style="max-height: 80px;">
+                </div>
+                <div class="col-4">
+                  <h6 class="fw-bold mb-0 text-dark">{{ item.name }}</h6>
+                  <p class="text-muted small mb-0">{{ item.price | currency }}</p>
+                </div>
+                <div class="col-3">
+                  <div class="d-flex align-items-center border rounded-2 overflow-hidden" style="width: fit-content;">
+                    <button (click)="cartService.updateQuantity(item.id, -1)" class="btn btn-sm btn-light border-0 px-3">-</button>
+                    <span class="px-2 fw-bold text-dark">{{ item.quantity }}</span>
+                    <button (click)="cartService.updateQuantity(item.id, 1)" class="btn btn-sm btn-warning border-0 px-3">+</button>
+                  </div>
+                </div>
+                <div class="col-3 text-end">
+                  <h6 class="fw-bold text-dark mb-0">{{ (item.price * item.quantity) | currency }}</h6>
+                  <button (click)="cartService.removeItem(item.id)" class="btn btn-link text-muted p-0 mt-1">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <div class="col-lg-4">
+          <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+            <h5 class="fw-bold mb-4 text-dark">Resumen</h5>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Subtotal:</span>
+              <span class="fw-bold text-dark">{{ cartService.totalPrice() | currency }}</span>
+            </div>
+            <p class="text-muted small">Impuestos calculados al pagar</p>
+            <hr class="my-4 opacity-10">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+              <span class="h6 fw-bold mb-0">Total:</span>
+              <span class="h4 fw-bold text-warning mb-0">{{ cartService.totalPrice() | currency }}</span>
+            </div>
+            <button class="btn btn-warning w-100 py-3 fw-bold rounded-3 text-uppercase shadow-sm" (click)="abrirModal()">
+              Proceder al Pago
+            </button>
+          </div>
+        </div> </div> </div> <ng-template #emptyCart>
+      <div class="text-center py-5 animate__animated animate__fadeIn">
+        <div class="mb-4">
+          <i class="bi bi-cart-x text-secondary" style="font-size: 5rem; opacity: 0.3;"></i>
+        </div>
+        <h3 class="fw-bold text-dark">Tu carrito está vacío</h3>
+        <p class="text-muted mb-4">Parece que aún no has añadido nada a tu equipo Payibox.</p>
+        <a routerLink="/store" class="btn btn-warning px-5 py-3 fw-bold text-uppercase rounded-pill shadow-sm">
+          Volver a la Tienda
+        </a>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<app-metodo-pago #modalPago></app-metodo-pago>

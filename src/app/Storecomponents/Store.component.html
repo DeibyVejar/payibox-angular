@@ -1,0 +1,32 @@
+<section class="store-section">
+  <div class="container">
+    <header class="store-header">
+      <h2 class=" text-dark">EQUIPAMIENTO <span class="text-warning">PAYIBOX</span></h2>
+      <p class="section-subtitle">Optimiza tu rendimiento con lo mejor en suplementación y accesorios.</p>
+    </header>
+
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let item of products">
+        <div class="product-image-wrapper">
+          <img [src]="item.image" [alt]="item.name" class="product-image">
+          <div class="image-overlay"></div>
+        </div>
+
+        <div class="product-details">
+          
+
+          <span class="product-category">{{ item.category.name }}</span>
+          <h3 class="product-name">{{ item.name }}</h3>
+
+          <div class="product-footer">
+            <span class="product-price">${{ item.price | number:'1.2-2' }}</span>
+            <button class="add-to-cart-btn" (click)="addToCart(item)">
+              <span class="icon">+</span>
+              Añadir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

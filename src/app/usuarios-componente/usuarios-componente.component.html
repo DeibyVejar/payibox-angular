@@ -1,0 +1,84 @@
+<div class="users-container py-5">
+  <div class="container mt-4">
+
+    <div class="mb-5">
+      <h2 class="fw-bold text-dark mb-1 text-uppercase tracking-wider">Control de Usuarios</h2>
+      <p class="text-muted small mb-0">Administra las credenciales, roles y accesos a la plataforma Payibox</p>
+    </div>
+
+    <div *ngIf="cargando" class="text-center my-5">
+      <div class="spinner-border text-warning" role="status"></div>
+    </div>
+
+    <div *ngIf="!cargando">
+      <div *ngFor="let usuario of usuarios" class="user-card bg-white rounded-3 p-4 mb-4 shadow-sm">
+
+        <div class="row align-items-center mb-3 pb-3 border-bottom border-light-subtle">
+          <div class="col-6 col-md-3">
+            <span class="text-uppercase text-muted x-small d-block fw-semibold mb-1">Rol de Acceso</span>
+            <span class="role-badge" [ngClass]="usuario.role === 'admin' ? 'role-admin' : 'role-client'">
+              {{ usuario.role === 'admin' ? 'ADMINISTRADOR' : 'CLIENTE' }}
+            </span>
+          </div>
+          <div class="col-6 col-md-3">
+            <span class="text-uppercase text-muted x-small d-block fw-semibold mb-1">Correo Electrónico</span>
+            <span class="fw-semibold text-dark small text-truncate d-block">{{ usuario.email }}</span>
+          </div>
+          <div class="col-12 col-md-6 text-md-end mt-2 mt-md-0">
+            <span class="text-muted small fw-semibold">ID USUARIO: PBX-USR-00{{ usuario.id }}</span>
+          </div>
+        </div>
+
+        <div class="row align-items-center">
+
+          <div class="col-12 col-md-5 d-flex align-items-center mb-3 mb-md-0">
+            <div
+              class="avatar-placeholder rounded-circle d-flex align-items-center justify-content-center me-3 shadow-smfw-bold text-secondary">
+              {{ getInicial(usuario.name || usuario.first_name) }}
+            </div>
+            <div>
+              <h5 class="fw-bold text-dark mb-0 fs-6">{{ usuario.name || 'Cliente sin Nombre' }}</h5>
+              <span class="text-muted x-small">Registrado vía Web</span>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-4 d-flex justify-content-md-center align-items-center">
+            <button (click)="iniciarEdicion(usuario)" class="btn btn-sm btn-outline-dark">
+              Editar Usuario
+            </button>
+
+            <div *ngIf="usuarioEditando === usuario" class="p-3 border mt-2 bg-light rounded">
+              <h5>Editando: {{ usuario.name }}</h5>
+              <input [(ngModel)]="formEditar.name" placeholder="Nombre" class="form-control mb-2">
+              <input [(ngModel)]="formEditar.email" placeholder="Correo" class="form-control mb-2">
+              <select [(ngModel)]="formEditar.role" class="form-select mb-2">
+                <option value="admin">Administrador</option>
+                <option value="client">Cliente</option>
+              </select>
+              <input [(ngModel)]="formEditar.password" type="password" placeholder="Nueva contraseña"
+                class="form-control mb-2">
+
+              <button (click)="guardarCambios()" class="btn btn-success">Guardar</button>
+              <button (click)="cancelarEdicion()" class="btn btn-secondary ms-2">Cancelar</button>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-3 text-end">
+            <button (click)="eliminarUsuario(usuario)"
+              class="btn-delete-user text-danger bg-transparent border-0 fw-semibold p-0">
+              <i class="bi bi-trash3-fill me-1"></i> Dar de Baja
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div *ngIf="usuarios.length === 0"
+        class="text-center py-5 bg-white rounded-3 shadow-sm border border-light-subtle">
+        <p class="text-muted mb-0">No se encontraron usuarios registrados en la base de datos.</p>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,54 @@
+:root { --primary: #ffcc00; }
+
+.nosotros-container {
+  padding: 40px 20px; /* Reduje el margen superior de 80px a 40px */
+  background: #ffffff;
+  text-align: center;
+}
+
+h2 { font-size: 2rem; margin-bottom: 30px; color: #000; }
+
+.linea-tiempo { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
+
+.linea-tiempo button {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #f4f4f4;
+  color: #888; /* Color inicial del icono */
+  font-size: 1.3rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Forzamos el color amarillo en el icono (i) al hacer hover */
+.linea-tiempo button:hover i {
+  color: #ffcc00 !important; 
+}
+
+/* Forzamos el color amarillo en el borde al hacer hover */
+.linea-tiempo button:hover {
+  border-color: #ffcc00;
+  transform: translateY(-5px);
+}
+
+.linea-tiempo button.active {
+  background: #ffcc00;
+  color: #000; /* Color del icono cuando el botón está activo */
+}
+
+/* Contenido */
+.contenido-hito {
+  display: flex; flex-direction: column; gap: 40px; max-width: 900px; margin: 0 auto;
+  text-align: left;
+}
+
+.imagen-wrapper img { width: 100%; border-radius: 15px; }
+
+.texto-wrapper h3 { color: var(--primary); font-size: 1.8rem; margin-bottom: 15px; }
+.texto-wrapper p { color: #666; font-size: 1.1rem; line-height: 1.6; }
+
+@media (min-width: 992px) {
+  .contenido-hito { flex-direction: row; align-items: center; }
+  .imagen-wrapper, .texto-wrapper { flex: 1; }
+}
