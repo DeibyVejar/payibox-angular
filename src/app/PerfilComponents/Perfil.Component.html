@@ -1,4 +1,4 @@
-<div class="d-grid gap-3" *ngIf="pedidosLocales?.length > 0; else noOrders">
+<div class="d-grid gap-3" *ngIf="pedidosLocales && pedidosLocales.length > 0; else noOrders">
   <div class="card border border-light-subtle shadow-sm rounded-4 overflow-hidden bg-white"
     *ngFor="let pedido of pedidosLocales">
 
