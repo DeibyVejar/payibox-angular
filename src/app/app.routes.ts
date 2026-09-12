@@ -9,18 +9,34 @@ import { SeccionNosotrosComponent } from './Storecomponents/seccion-nosotros/sec
 import { AdminUploadComponent } from './admin-upload/adminuploadcomponents/adminuploadcomponent.component';
 import { StockComponent } from './stock-item/stock-item.component';
 import { UsersComponent } from './usuarios-componente/usuarios-componente.component';
+import { adminGuard } from './guards/admin.guard'; // Importamos el guardián
 
 export const routes: Routes = [
   { path: 'perfil', component: PerfilComponent },
   { path: 'car', component: CartComponent },
   { path: 'store', component: StoreComponent },
-  { path: 'register', component: RegisterComponent }, // El nombre de la clase de tu componente
-  { path: 'login', component: LoginComponent }, // El nombre de la clase de tu componente
-  { path: '', component: HomeComponent },      // Tu página principal
-  { path: "nosotros", component: SeccionNosotrosComponent } , // Ruta para la sección "Nosotros"
-  { path: "adminuploadcomponent", component: AdminUploadComponent },
-  { path: "stock", component: StockComponent }, 
-  { path: "usuarios", component: UsersComponent }
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
+  { path: '', component: HomeComponent },      
+  { path: "nosotros", component: SeccionNosotrosComponent }, 
+  
+  // Rutas protegidas exclusivamente para el administrador
+  { 
+    path: "adminuploadcomponent", 
+    component: AdminUploadComponent, 
+    canActivate: [adminGuard] 
+  },
+  { 
+    path: "stock", 
+    component: StockComponent, 
+    canActivate: [adminGuard] 
+  }, 
+  { 
+    path: "usuarios", 
+    component: UsersComponent, 
+    canActivate: [adminGuard] 
+  },
 
+  // Ruta comodín por si escriben cualquier cosa en la URL
+  { path: '**', redirectTo: '' }
 ];
-
