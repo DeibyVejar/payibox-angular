@@ -1,28 +1,28 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router'; // 1. Importar Router
+import { RouterLink } from '@angular/router';
+import { CartService } from '../services/car.services';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { AdminUploadComponent } from '../admin-upload/adminuploadcomponents/adminuploadcomponent.component';
-
+import { Router } from '@angular/router';
 @Component({
-  selector: 'app-navbar-admin',
+  selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, AdminUploadComponent],
-  templateUrl: './Navbaradmin.Component.html',
-  styleUrls: ['./Navbaradmin.Component.css']
+  imports: [CommonModule, RouterLink, RouterModule],
+  templateUrl: './Navbar.Component.html',
+  styleUrl: './Navbar.Component.css'
 })
-export class NavbarAdminComponent {
-  public authService = inject(AuthService);
-  private router = inject(Router); // 2. Inyectar el Router
-  mostrarModalSubir: boolean = false;
 
-  logout() {
-    // Llamamos al logout del servicio (que borra el localStorage / token)
-    this.authService.logout();
+export class NavbarComponent {
 
-    // Forzamos la redirección inmediata a la tienda o al login
+   cartService = inject(CartService);
+  authService = inject(AuthService);
+  router = inject(Router);
+
+ logout() {
+    this.authService.logout(); 
     this.router.navigate(['/login']).then(() => {
-      window.location.reload(); // Limpia estados residuales de memoria en Angular
-    });
+      window.location.reload();
+    }); 
   }
 }
