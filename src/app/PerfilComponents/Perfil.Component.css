@@ -42,3 +42,7 @@
 .object-fit-cover {
   object-fit: cover;
 }
+
+.container, .perfil-container {
+  padding-top: 90px;
+}

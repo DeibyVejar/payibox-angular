@@ -1,17 +1,17 @@
-/* Navbar.Component.css */
-
-/* Estilo general de la barra (Negro mate fijo arriba) */
 .custom-navbar {
-  background-color: #212529 !important; /* El color de fondo de la tercera imagen */
-  border-bottom: 1px solid #333; /* Línea sutil inferior */
-  padding: 1.2rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Sombra suave */
-  
+  background-color: #212529 !important;
+  border-bottom: 1px solid #333;
+  padding: 0.8rem 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 1000;
 }
 
-/* Estilo del Logo y Texto de la marca */
 .brand-logo {
-  height: 35px; /* Ajusta el tamaño del icono según tu imagen */
+  height: 35px;
   width: auto;
 }
 
@@ -21,84 +21,71 @@
   letter-spacing: 1px;
 }
 
-/* Estilo de los enlaces centrales */
 .custom-navbar .nav-link {
-  color: #aaa !important; /* Gris suave para los enlaces */
+  color: #aaa !important;
   font-weight: 500;
   font-size: 0.95rem;
   transition: color 0.3s ease;
 }
 
 .custom-navbar .nav-link:hover {
-  color: #e4ca09 !important; /* Blanco al pasar el mouse */
+  color: #e4ca09 !important;
 }
 
-/* Estilo del BOTÓN AMARILLO REDONDO (Clave) */
 .btn-payibox-login {
-  background-color: #ffc107; /* Amarillo de PrimeNG/Bootstrap */
-  border-radius: 25px; /* Redondeado idéntico a la imagen */
+  background-color: #ffc107;
+  border-radius: 25px;
   border: none;
   font-size: 0.9rem;
   transition: background-color 0.3s ease;
 }
 
 .btn-payibox-login:hover {
-  background-color: #e0a800; /* Amarillo más oscuro al pasar el mouse */
+  background-color: #e0a800;
 }
 
-/* Busca la clase de tu Navbar superior, ej: .navbar, .header-container, etc. */
-.navbar {
-  position: relative; /* Asegura que el navbar sea la referencia */
-  overflow: visible !important; /* CAMBIO CLAVE: Permite que el logo se vea aunque sobresalga */
-  z-index: 100; /* Dale un z-index alto para que esté por encima de todo */
+/* Fondo y margen para el menú colapsado en pantallas móviles */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background-color: #212529;
+    padding: 1rem 0;
+    margin-top: 0.5rem;
+    border-top: 1px solid #333;
+  }
 }
 
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background-color: #121212;
-}
-
-.navbar {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    margin: 0 !important; /* Elimina cualquier margen residual */
-    padding: 0.5rem 1rem; /* Ajusta el padding interno, no el margen */
-    border: none !important;
-    height: 70px; /* Define una altura fija para poder calcular el pegado */
-}
-
-/* 1. Mantiene el icono de perfil blanco y nítido */
 .dropdown-toggle i.bi-person-circle {
-    color: white !important; /* Forzamos el blanco */
-    transition: all 0.2s ease;
+  color: white !important;
 }
 
-/* 2. Mantiene el nombre blanco */
 .dropdown-toggle span {
-    color: white !important;
-    font-weight: 500;
+  color: white !important;
+  font-weight: 500;
 }
 
-/* 3. Estilo del Dropdown Menu (ya se ve bien en tu captura) */
 .dropdown-menu.bg-dark {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-    padding: 10px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 10px 0;
 }
 
-/* 4. Efecto de Hover DENTRO del menú (no en el botón) */
 .dropdown-item:hover {
-    background-color: rgba(255, 255, 255, 0.05); /* Un gris muy sutil */
-    color: #ffc107 !important; /* El amarillo de tu marca */
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffc107 !important;
 }
 
-/* 5. Asegurar que 'Cerrar Sesión' mantenga su color rojo */
 .dropdown-item.text-danger:hover {
-    background-color: rgba(220, 53, 69, 0.1); /* Fondo rojo sutil al hover */
-    color: #dc3545 !important;
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545 !important;
+}
+
+/* Colócalo al final de tu src/styles.css global */
+@media (max-width: 991.98px) {
+  .custom-navbar .navbar-collapse {
+    background-color: #212529 !important;
+    padding: 1rem 0;
+    margin-top: 0.5rem;
+    border-top: 1px solid #333;
+  }
 }
