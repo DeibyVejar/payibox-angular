@@ -45,18 +45,27 @@ export class AdminUploadComponent {
     if (this.form.valid) {
       const formData = new FormData();
 
-      // Mapeo manual para coincidir con la ForeignKey de Django
+      // Normalizamos a minúsculas y limpiamos espacios para evitar conflictos de mapeo
+      const categoriaKey = (this.form.value.categoria || '').trim().toLowerCase();
       const catMap: { [key: string]: number } = {
         'suplementos': 1,
         'accesorios': 2,
         'ropa': 3
       };
 
+      const categoryId = catMap[categoriaKey];
+
+      if (!categoryId) {
+        console.error('Categoría no válida:', this.form.value.categoria);
+        alert('Por favor selecciona una categoría válida.');
+        return;
+      }
+
       formData.append('name', this.form.value.nombre);
       formData.append('price', this.form.value.precio);
       formData.append('stock', this.form.value.cantidad);
       formData.append('image', this.form.value.imagen);
-      formData.append('category_id', catMap[this.form.value.categoria].toString());
+      formData.append('category_id', categoryId.toString());
       formData.append('description', 'Sin descripción');
 
       this.productService.createProduct(formData).subscribe({
