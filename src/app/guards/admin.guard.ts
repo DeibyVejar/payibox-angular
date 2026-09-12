@@ -3,25 +3,29 @@ import { CanActivateFn, Router } from '@angular/router';
 
 export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  
-  // Obtenemos los datos del usuario guardados en el localStorage
   const userJson = localStorage.getItem('user');
   
-  if (userJson) {
-    try {
-      const user = JSON.parse(userJson);
-      
-      // Validamos si existe el token y si el rol o correo corresponde al administrador
-      // (Ajusta 'admin' o el correo según cómo guardes el rol en tu backend)
-      if (user && user.token) {
-        return true; // Permite el paso
-      }
-    } catch (e) {
-      console.error("Error al leer el usuario del localStorage", e);
-    }
+  // 1. Si ni siquiera está logueado, lo mandamos al login
+  if (!userJson) {
+    router.navigate(['/login']);
+    return false;
   }
 
-  // Si no está autenticado o no es admin, lo sacamos al login
-  router.navigate(['/login']);
+  try {
+    const user = JSON.parse(userJson);
+    
+    // 2. Verificamos si el usuario es administrador según los datos de tu backend (Django)
+    // (Ajusta 'is_staff' o 'is_superuser' según lo que guardes al iniciar sesión)
+    const esAdmin = user.is_staff || user.is_superuser || user.role === 'admin';
+
+    if (user.token && esAdmin) {
+      return true; // Permite el acceso al panel de admin
+    }
+  } catch (e) {
+    console.error("Error al validar permisos", e);
+  }
+
+  // 3. Si está logueado pero es un usuario común, lo redirigimos a acceso denegado
+  router.navigate(['/acceso-denegado']);
   return false;
 };

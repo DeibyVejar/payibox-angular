@@ -9,7 +9,8 @@ import { SeccionNosotrosComponent } from './Storecomponents/seccion-nosotros/sec
 import { AdminUploadComponent } from './admin-upload/adminuploadcomponents/adminuploadcomponent.component';
 import { StockComponent } from './stock-item/stock-item.component';
 import { UsersComponent } from './usuarios-componente/usuarios-componente.component';
-import { adminGuard } from './guards/admin.guard'; // Importamos el guardián
+import { AccesoDenegadoComponent } from './acceso-denegado/acceso-denegado.component'; // Importar
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   { path: 'perfil', component: PerfilComponent },
@@ -19,24 +20,12 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: HomeComponent },      
   { path: "nosotros", component: SeccionNosotrosComponent }, 
-  
-  // Rutas protegidas exclusivamente para el administrador
-  { 
-    path: "adminuploadcomponent", 
-    component: AdminUploadComponent, 
-    canActivate: [adminGuard] 
-  },
-  { 
-    path: "stock", 
-    component: StockComponent, 
-    canActivate: [adminGuard] 
-  }, 
-  { 
-    path: "usuarios", 
-    component: UsersComponent, 
-    canActivate: [adminGuard] 
-  },
+  { path: 'acceso-denegado', component: AccesoDenegadoComponent }, // Ruta pública de error
 
-  // Ruta comodín por si escriben cualquier cosa en la URL
+  // Rutas protegidas exclusivamente para admin
+  { path: "adminuploadcomponent", component: AdminUploadComponent, canActivate: [adminGuard] },
+  { path: "stock", component: StockComponent, canActivate: [adminGuard] }, 
+  { path: "usuarios", component: UsersComponent, canActivate: [adminGuard] },
+
   { path: '**', redirectTo: '' }
 ];
