@@ -1,7 +1,7 @@
 <section class="store-section">
   <div class="container">
     <header class="store-header">
-      <h2 class=" text-dark">EQUIPAMIENTO <span class="text-warning">PAYIBOX</span></h2>
+      <h2 class="text-dark">EQUIPAMIENTO <span class="text-warning">PAYIBOX</span></h2>
       <p class="section-subtitle">Optimiza tu rendimiento con lo mejor en suplementación y accesorios.</p>
     </header>
 
@@ -13,16 +13,25 @@
         </div>
 
         <div class="product-details">
-          
-
           <span class="product-category">{{ item.category.name }}</span>
           <h3 class="product-name">{{ item.name }}</h3>
 
+          <!-- Indicador visual de stock -->
+          <div class="stock-container mb-2">
+            <span class="stock-badge" 
+                  [class.low-stock]="item.stock <= 3 && item.stock > 0" 
+                  [class.out-of-stock]="item.stock === 0">
+              {{ item.stock > 0 ? 'Stock: ' + item.stock + ' un.' : 'Agotado' }}
+            </span>
+          </div>
+
           <div class="product-footer">
             <span class="product-price">${{ item.price | number:'1.2-2' }}</span>
-            <button class="add-to-cart-btn" (click)="addToCart(item)">
-              <span class="icon">+</span>
-              Añadir
+            
+            <!-- Botón bloqueado físicamente si el producto no tiene existencias -->
+            <button class="add-to-cart-btn" [disabled]="item.stock === 0" (click)="addToCart(item)">
+              <span class="icon" *ngIf="item.stock > 0">+</span>
+              {{ item.stock > 0 ? 'Añadir' : 'Sin stock' }}
             </button>
           </div>
         </div>
