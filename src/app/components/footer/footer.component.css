@@ -1,0 +1,94 @@
+/* =========================================================
+   PAYIBOX FOOTER
+   ========================================================= */
+
+:host {
+  display: block;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+/* Footer a pantalla completa y más compacto */
+.payibox-footer {
+  width: 100%;
+  margin-top: 2.5rem !important;
+  background-color: #212529 !important;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Contenido interno */
+.payibox-footer > .container {
+  width: 100%;
+}
+
+/* =========================================================
+   TEXTO Y ELEMENTOS
+   ========================================================= */
+
+.footer-description {
+  max-width: 400px;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+
+.payibox-footer p {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.payibox-footer a {
+  transition: all 0.2s ease;
+}
+
+.payibox-footer .hover-white:hover {
+  color: #fff !important;
+}
+
+/* Redes Sociales */
+.payibox-footer .social-btn {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contacto */
+.payibox-footer li {
+  overflow-wrap: anywhere;
+}
+
+.payibox-footer li i {
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+  .payibox-footer {
+    margin-top: 2rem !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .payibox-footer {
+    margin-top: 2rem !important;
+    padding-top: 1.75rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+
+  .payibox-footer .row {
+    row-gap: 1.5rem !important;
+  }
+
+  .payibox-footer .footer-description {
+    max-width: 100% !important;
+    font-size: 0.85rem;
+  }
+}

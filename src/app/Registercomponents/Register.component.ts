@@ -2,17 +2,21 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // 1. Importar CommonModule
+import { SpinnerComponent } from '../spinner/spinner.component'; // 2. Importar SpinnerComponent
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, CommonModule, SpinnerComponent], // 3. Añadir a imports
   templateUrl: './Register.component.html',
   styleUrl: './Register.component.css'
 })
 export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  cargando: boolean = false; // 4. Variable para controlar el estado de carga
 
   userData = {
     first_name: '',
@@ -23,13 +27,18 @@ export class RegisterComponent {
   };
 
   onRegister() {
+    // Evita ejecuciones duplicadas si la petición ya está en proceso
+    if (this.cargando) return;
+
     // 1. Validación de contraseñas
     if (this.userData.password !== this.userData.confirmPassword) {
       alert('Las contraseñas no coinciden');
       return;
     }
 
-    // 2. Generar el username automáticamente a partir del email (evita error de Django)
+    this.cargando = true; // Activar spinner al enviar
+
+    // 2. Generar el username automáticamente a partir del email
     const username = this.userData.email.split('@')[0];
 
     // 3. Estructura de datos que espera el backend
@@ -49,6 +58,7 @@ export class RegisterComponent {
         this.router.navigate(['/login']);
       },
       error: (err: any) => {
+        this.cargando = false; // Desactivar spinner para corregir datos e reintentar
         console.error('Error del servidor:', err.error);
 
         // Manejo de errores específicos que envía Django

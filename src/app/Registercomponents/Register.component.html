@@ -1,3 +1,5 @@
+<app-spinner *ngIf="cargando"></app-spinner>
+
 <div class="login-wrapper">
   <div class="login-container">
     <div class="login-box">
@@ -50,7 +52,8 @@
           </label>
         </div>
 
-        <button class="btn-primary-custom w-100 py-3" type="submit">
+        <!-- Botón deshabilitado físicamente durante la carga -->
+        <button class="btn-primary-custom w-100 py-3" type="submit" [disabled]="cargando">
           Registrarme ahora
         </button>
 

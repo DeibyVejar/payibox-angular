@@ -7,6 +7,7 @@ import { NgClass } from '@angular/common';
 import { NavbarComponent } from './Navbar.Component/Navbar.Component';
 import { NavbarAdminComponent } from './NavbaradminComponents/Navbaradmin.Component';
 import { AuthService } from './services/auth.service';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 @Component({
@@ -18,7 +19,8 @@ import { AuthService } from './services/auth.service';
     RouterOutlet, 
     NavbarComponent, 
     NavbarAdminComponent, 
-    CommonModule
+    CommonModule,
+    FooterComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
