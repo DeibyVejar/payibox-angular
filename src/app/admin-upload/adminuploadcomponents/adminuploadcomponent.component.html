@@ -1,3 +1,5 @@
+<app-spinner *ngIf="cargando"></app-spinner>
+
 <div class="modal-overlay" (click)="cerrar.emit()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h2>Subir Nuevo Artículo</h2>
@@ -7,29 +9,29 @@
       <small class="error-msg" *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched">* Nombre requerido</small>
 
       <div class="categorias-container">
-  <label class="input-label">Categoría:</label>
-  
-  <div class="opciones-cat" 
-       [class.ng-invalid]="form.get('categoria')?.invalid && form.get('categoria')?.touched"
-       [class.ng-touched]="form.get('categoria')?.touched">
-       
-    <div class="chip" 
-         [class.selected]="form.value.categoria === 'suplementos'" 
-         (click)="seleccionarCategoria('suplementos')">💊 Suplementos</div>
-    <div class="chip" 
-         [class.selected]="form.value.categoria === 'accesorios'" 
-         (click)="seleccionarCategoria('accesorios')">⌚ Accesorios</div>
-    <div class="chip" 
-         [class.selected]="form.value.categoria === 'ropa'" 
-         (click)="seleccionarCategoria('ropa')">👕 Ropa</div>
-  </div>
-  
-  <div class="error-wrapper">
-    <small *ngIf="form.get('categoria')?.invalid && form.get('categoria')?.touched" class="error-msg">
-      * Selecciona una categoría
-    </small>
-  </div>
-</div>
+        <label class="input-label">Categoría:</label>
+        
+        <div class="opciones-cat" 
+             [class.ng-invalid]="form.get('categoria')?.invalid && form.get('categoria')?.touched"
+             [class.ng-touched]="form.get('categoria')?.touched">
+             
+          <div class="chip" 
+               [class.selected]="form.value.categoria === 'suplementos'" 
+               (click)="seleccionarCategoria('suplementos')">💊 Suplementos</div>
+          <div class="chip" 
+               [class.selected]="form.value.categoria === 'accesorios'" 
+               (click)="seleccionarCategoria('accesorios')">⌚ Accesorios</div>
+          <div class="chip" 
+               [class.selected]="form.value.categoria === 'ropa'" 
+               (click)="seleccionarCategoria('ropa')">👕 Ropa</div>
+        </div>
+        
+        <div class="error-wrapper">
+          <small *ngIf="form.get('categoria')?.invalid && form.get('categoria')?.touched" class="error-msg">
+            * Selecciona una categoría
+          </small>
+        </div>
+      </div>
 
       <input formControlName="precio" class="input-field" type="number" placeholder="Precio">
       <small class="error-msg" *ngIf="form.get('precio')?.invalid && form.get('precio')?.touched">* Precio requerido</small>
@@ -37,16 +39,19 @@
       <small class="error-msg" *ngIf="form.get('cantidad')?.invalid && form.get('cantidad')?.touched">* Cantidad requerida</small>
 
       <div class="file-upload-wrapper">
-  <label for="fileInput" class="btn-file-upload">
-    📷 Seleccionar Imagen
-  </label>
-  <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
-  <small class="error-msg" *ngIf="form.get('imagen')?.invalid && form.get('imagen')?.touched">* Imagen requerida</small>
-  
-  <img *ngIf="imagePreview" [src]="imagePreview" class="preview-img">
-</div>
+        <label for="fileInput" class="btn-file-upload">
+          📷 Seleccionar Imagen
+        </label>
+        <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+        <small class="error-msg" *ngIf="form.get('imagen')?.invalid && form.get('imagen')?.touched">* Imagen requerida</small>
+        
+        <img *ngIf="imagePreview" [src]="imagePreview" class="preview-img">
+      </div>
 
-      <button type="submit" class="btn-publicar">Publicar</button>
+      <!-- Botón deshabilitado físicamente mientras esté en estado de carga -->
+      <button type="submit" class="btn-publicar" [disabled]="cargando">
+        {{ cargando ? 'Publicando...' : 'Publicar' }}
+      </button>
     </form>
   </div>
 </div>
