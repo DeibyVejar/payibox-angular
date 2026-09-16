@@ -2,13 +2,13 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // 1. Importar CommonModule
-import { SpinnerComponent } from '../spinner/spinner.component'; // 2. Importar SpinnerComponent
+import { CommonModule } from '@angular/common';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule, SpinnerComponent], // 3. Añadir a imports
+  imports: [RouterLink, FormsModule, CommonModule, SpinnerComponent],
   templateUrl: './Register.component.html',
   styleUrl: './Register.component.css'
 })
@@ -16,7 +16,7 @@ export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  cargando: boolean = false; // 4. Variable para controlar el estado de carga
+  cargando: boolean = false;
 
   userData = {
     first_name: '',
@@ -27,25 +27,38 @@ export class RegisterComponent {
   };
 
   onRegister() {
-    // Evita ejecuciones duplicadas si la petición ya está en proceso
     if (this.cargando) return;
 
-    // 1. Validación de contraseñas
+    // Permite letras (mayúsculas/minúsculas), acentos, la letra ñ y espacios
+    const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+
+    // 1. Validación de nombre y apellido
+    if (!this.userData.first_name.trim() || !nombreRegex.test(this.userData.first_name.trim())) {
+      alert('El nombre solo debe contener letras.');
+      return;
+    }
+
+    if (!this.userData.last_name.trim() || !nombreRegex.test(this.userData.last_name.trim())) {
+      alert('El apellido solo debe contener letras.');
+      return;
+    }
+
+    // 2. Validación de contraseñas
     if (this.userData.password !== this.userData.confirmPassword) {
       alert('Las contraseñas no coinciden');
       return;
     }
 
-    this.cargando = true; // Activar spinner al enviar
+    this.cargando = true;
 
-    // 2. Generar el username automáticamente a partir del email
+    // 3. Generar el username automáticamente a partir del email
     const username = this.userData.email.split('@')[0];
 
-    // 3. Estructura de datos que espera el backend
+    // 4. Estructura de datos limpia enviada al backend
     const dataToSend = {
       username: username,
-      first_name: this.userData.first_name,
-      last_name: this.userData.last_name,
+      first_name: this.userData.first_name.trim(),
+      last_name: this.userData.last_name.trim(),
       email: this.userData.email,
       password: this.userData.password
     };
@@ -58,10 +71,9 @@ export class RegisterComponent {
         this.router.navigate(['/login']);
       },
       error: (err: any) => {
-        this.cargando = false; // Desactivar spinner para corregir datos e reintentar
+        this.cargando = false;
         console.error('Error del servidor:', err.error);
 
-        // Manejo de errores específicos que envía Django
         const errors = err.error;
         let mensaje = 'Error al registrar: ';
 
