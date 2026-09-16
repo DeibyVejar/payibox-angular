@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 
 export interface Category {
   id: number;
@@ -15,7 +15,6 @@ export interface Product {
   image?: string;
 }
 
-// ✨ Nueva interfaz que asegura que en el carrito siempre exista 'quantity'
 export interface CartItem extends Product {
   quantity: number;
 }
@@ -23,16 +22,33 @@ export interface CartItem extends Product {
 @Injectable({ providedIn: 'root' })
 export class CartService {
 
-  getItems() {
-    return this.cartItems();
-  }
-
-  // ✨ El Signal ahora maneja CartItem[] en lugar de Product[]
-  private cartItems = signal<CartItem[]>([]); 
+  // 1. Inicializar leyendo desde localStorage si existen datos guardados
+  private cartItems = signal<CartItem[]>(this.loadCartFromStorage());
 
   items = computed(() => this.cartItems());
   totalItems = computed(() => this.cartItems().reduce((prev, curr) => prev + curr.quantity, 0));
   totalPrice = computed(() => this.cartItems().reduce((prev, curr) => prev + (curr.price * curr.quantity), 0));
+
+  constructor() {
+    // 2. 'effect' reacciona automáticamente a cualquier cambio en cartItems y lo guarda
+    effect(() => {
+      localStorage.setItem('payibox_cart', JSON.stringify(this.cartItems()));
+    });
+  }
+
+  // Método auxiliar para recuperar el carrito almacenado
+  private loadCartFromStorage(): CartItem[] {
+    try {
+      const savedCart = localStorage.getItem('payibox_cart');
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  getItems() {
+    return this.cartItems();
+  }
 
   addToCart(product: Product) {
     this.cartItems.update(items => {
