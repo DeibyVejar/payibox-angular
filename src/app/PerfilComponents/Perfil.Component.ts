@@ -1,10 +1,11 @@
-import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { OrderService } from '../services/order.service';
-import { AuthService } from '../services/auth.service';
 import { take } from 'rxjs/operators';
+import { OrderService } from '../services/order.service'; // Ajusta según tu estructura
+import { AuthService } from '../services/auth.service';   // Ajusta según tu estructura
+
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import Swal from 'sweetalert2';
@@ -25,6 +26,9 @@ export class PerfilComponent implements OnInit {
   public pedidosLocales: any[] = [];
   public formInputs: any = { username: '', email: '', password: '', avatar: '' };
   public isAdmin: boolean = false;
+  
+  // Flag para controlar el estado de carga y evitar el FOUC / destello
+  public cargandoPedidos: boolean = true;
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -39,7 +43,7 @@ export class PerfilComponent implements OnInit {
       }
 
       // Definimos el rol basándonos en el AuthService
-      this.isAdmin = user?.role === 'admin' ? true : false;
+      this.isAdmin = user?.role === 'admin';
 
       // Adaptación de nombre para la UI
       this.formInputs.username = user.first_name ? `${user.first_name} ${user.last_name}` : (user.username || '');
@@ -61,9 +65,17 @@ export class PerfilComponent implements OnInit {
   }
 
   cargarPedidos() {
+    this.cargandoPedidos = true;
+
     this.orderService.getMyOrders().pipe(take(1)).subscribe({
-      next: (data: any) => this.pedidosLocales = data,
-      error: (err: any) => console.error("Error al cargar pedidos:", err)
+      next: (data: any) => {
+        this.pedidosLocales = data;
+        this.cargandoPedidos = false; // ✨ Ocultamos la carga tras recibir la respuesta
+      },
+      error: (err: any) => {
+        console.error("Error al cargar pedidos:", err);
+        this.cargandoPedidos = false; // ✨ Apagamos la carga incluso si hay error
+      }
     });
   }
 
@@ -122,21 +134,16 @@ export class PerfilComponent implements OnInit {
     return 'Pendiente';
   }
 
-  // Métodos pendientes de implementación
   actualizarPerfil() { }
   onAvatarChange(e: any) { }
-  // En PerfilComponent.ts
 
-  // ... dentro de la clase ...
   cambiarEstado(pedido: any, event: any) {
     const nuevoEstado = event.target.value;
 
     this.orderService.updateOrderStatus(pedido.id, nuevoEstado).subscribe({
       next: (response) => {
-        // 1. Actualizamos localmente el pedido específico
         pedido.status = nuevoEstado;
 
-        // 2. Notificación de éxito
         Swal.fire({
           icon: 'success',
           title: '¡Éxito!',
@@ -147,7 +154,6 @@ export class PerfilComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al actualizar:', err);
-        // 3. Notificación de error
         Swal.fire({
           icon: 'error',
           title: 'Error',
