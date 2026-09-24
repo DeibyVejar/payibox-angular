@@ -5,15 +5,27 @@
       <p class="section-subtitle">Optimiza tu rendimiento con lo mejor en suplementación y accesorios.</p>
     </header>
 
-    <div class="product-grid">
-      <div class="product-card" *ngFor="let item of products">
+    <!-- BARRA DE FILTROS POR CATEGORÍA -->
+    <div class="category-filters d-flex flex-wrap justify-content-center gap-2 mb-4">
+      <button 
+        *ngFor="let cat of categorias" 
+        (click)="seleccionarCategoria(cat)" 
+        class="btn btn-sm text-capitalize px-3 py-2 rounded-pill fw-bold transition-all"
+        [ngClass]="categoriaSeleccionada === cat ? 'btn-warning text-dark shadow-sm' : 'btn-outline-secondary text-light'">
+        {{ cat === 'todos' ? 'Todos los artículos' : cat }}
+      </button>
+    </div>
+
+    <!-- GRID DE PRODUCTOS FILTRADOS -->
+    <div class="product-grid" *ngIf="productosFiltrados.length > 0; else noProducts">
+      <div class="product-card" *ngFor="let item of productosFiltrados">
         <div class="product-image-wrapper">
           <img [src]="item.image" [alt]="item.name" class="product-image">
           <div class="image-overlay"></div>
         </div>
 
         <div class="product-details">
-          <span class="product-category">{{ item.category.name }}</span>
+          <span class="product-category">{{ item.category?.name || item.category || 'PAYIBOX' }}</span>
           <h3 class="product-name">{{ item.name }}</h3>
 
           <!-- Indicador visual de stock -->
@@ -37,5 +49,14 @@
         </div>
       </div>
     </div>
+
+    <!-- MENSAJE SI NO HAY PRODUCTOS EN LA CATEGORÍA SELECCIONADA -->
+    <ng-template #noProducts>
+      <div class="text-center py-5">
+        <i class="bi bi-tags fs-1 text-muted"></i>
+        <p class="text-muted mt-2 fw-semibold">No hay artículos disponibles en la categoría "{{ categoriaSeleccionada }}".</p>
+      </div>
+    </ng-template>
+
   </div>
 </section>
