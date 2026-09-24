@@ -1,17 +1,15 @@
-/* Register.component.css */
-
-/* Permite que el elemento personalizado de Angular se estire en Flexbox */
+/* Fuerza a que la etiqueta personalizada <app-register> se estire al 100% */
 :host {
   display: flex;
   flex-direction: column;
-  flex: 1 0 auto;
+  flex: 1;
   width: 100%;
+  background-color: #121212;
 }
 
-/* Contenedor principal centrado */
 .login-wrapper {
-  background-color: #121212; 
-  flex: 1 0 auto; /* Removido el min-height: 100vh para permitir flex estéril */
+  background-color: #121212;
+  flex: 1;
   width: 100%;
   display: flex;
   align-items: center;
