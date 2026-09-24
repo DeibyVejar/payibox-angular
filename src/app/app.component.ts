@@ -3,7 +3,7 @@ import { CommonModule, NgClass, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
-import { NavbarComponent } from './NavbarComponents/Navbar.Component';
+import { NavbarComponent } from './Navbar.Component/Navbar.Component';
 import { NavbarAdminComponent } from './NavbaradminComponents/Navbaradmin.Component';
 import { AuthService } from './services/auth.service';
 import { FooterComponent } from './components/footer/footer.component';
