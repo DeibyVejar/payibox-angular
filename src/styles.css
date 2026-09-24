@@ -1,0 +1,39 @@
+/* =========================================================
+ 1. ELIMINAR SCROLL HORIZONTAL GLOBAL
+   ========================================================= */
+html, body {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Corrige el desbordamiento lateral que provocan las filas (.row) de Bootstrap */
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* =========================================================
+   2. STICKY FOOTER (Footer siempre pegado al fondo)
+   ========================================================= */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Fuerza a que el contenedor de Angular ocupe el alto completo de la pantalla */
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* El contenido principal absorbe todo el espacio sobrante vertical */
+main, .main-content {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+/* El footer se mantiene abajo sin encimarse */
+app-footer, footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}
