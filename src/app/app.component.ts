@@ -1,19 +1,16 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, NgClass, isPlatformBrowser } from '@angular/common';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { NgClass } from '@angular/common';
-// 1. IMPORTA tus navbars aquí
-import { NavbarComponent } from './Navbar.Component/Navbar.Component';
+
+import { NavbarComponent } from './NavbarComponents/Navbar.Component';
 import { NavbarAdminComponent } from './NavbaradminComponents/Navbaradmin.Component';
 import { AuthService } from './services/auth.service';
 import { FooterComponent } from './components/footer/footer.component';
 
-
 @Component({
   selector: 'app-root',
   standalone: true,
-  // 2. AÑADE los componentes al array de imports
   imports: [
     NgClass,
     RouterOutlet, 
@@ -25,21 +22,24 @@ import { FooterComponent } from './components/footer/footer.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Payibox';
-  
-  // 3. INYECTA el AuthService como PUBLIC para que el HTML lo vea
+
   public authService = inject(AuthService);
   private router = inject(Router);
-  
-  public isAuthPage = false;
+  private platformId = inject(PLATFORM_ID);
 
-  constructor() {
+  public isAuthPage = false;
+  public isClient = false;
+
+  ngOnInit(): void {
+    // Se activa únicamente en el navegador cuando ya se tiene acceso a localStorage
+    this.isClient = isPlatformBrowser(this.platformId);
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       const url = event.urlAfterRedirects;
-      // Ocultamos la navbar en login y register
       this.isAuthPage = url === '/login' || url === '/register';
     });
   }

@@ -1,8 +1,10 @@
 @if (!isAuthPage) {
-  @if (authService.currentUser()?.role === 'admin') {
-    <app-navbar-admin></app-navbar-admin>
-  } @else {
-    <app-navbar></app-navbar>
+  @if (isClient) {
+    @if (authService.currentUser()?.role === 'admin') {
+      <app-navbar-admin></app-navbar-admin>
+    } @else {
+      <app-navbar></app-navbar>
+    }
   }
 }
 
