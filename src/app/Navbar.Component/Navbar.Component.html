@@ -1,4 +1,4 @@
-#<nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
   <div class="container-fluid px-3 px-md-4">
     
     <!-- 1. Logo (Extrema izquierda) -->
@@ -42,36 +42,38 @@
         <!-- Línea divisoria en móviles -->
         <hr class="border-secondary my-1 w-100 d-lg-none">
 
-        <!-- Sesión / Perfil de Usuario -->
+        <!-- Sesión / Perfil de Usuario (Se renderiza únicamente cuando el cliente está listo) -->
         <li class="nav-item px-3 w-100 w-lg-auto">
-          @if (authService.currentUser()) {
-          <div class="dropdown">
-            <button class="btn btn-outline-warning dropdown-toggle d-flex align-items-center gap-2 border-0 p-0" type="button"
-              id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <span class="text-white text-capitalize small">{{ authService.currentUser()?.username }}</span>
-              <i class="bi bi-person-circle fs-4 text-warning"></i>
-            </button>
-
-            <ul class="dropdown-menu dropdown-menu-end bg-dark border-secondary shadow mt-2" aria-labelledby="userDropdown">
-              <li>
-                <a class="dropdown-item text-light py-2 d-flex align-items-center" routerLink="/perfil">
-                  <i class="bi bi-person me-2"></i>Mi Perfil
-                </a>
-              </li>
-              <li>
-                <hr class="dropdown-divider border-secondary">
-              </li>
-              <li>
-                <button class="dropdown-item text-danger py-2 d-flex align-items-center" (click)="logout()">
-                  <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+          @if (isClient) {
+            @if (authService.currentUser()) {
+              <div class="dropdown">
+                <button class="btn btn-outline-warning dropdown-toggle d-flex align-items-center gap-2 border-0 p-0" type="button"
+                  id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="text-white text-capitalize small">{{ authService.currentUser()?.username }}</span>
+                  <i class="bi bi-person-circle fs-4 text-warning"></i>
                 </button>
-              </li>
-            </ul>
-          </div>
-          } @else {
-          <a class="btn btn-payibox-login text-dark fw-bold px-4 py-2 text-center d-inline-block w-100 w-lg-auto" routerLink="/login">
-            Iniciar Sesión
-          </a>
+
+                <ul class="dropdown-menu dropdown-menu-end bg-dark border-secondary shadow mt-2" aria-labelledby="userDropdown">
+                  <li>
+                    <a class="dropdown-item text-light py-2 d-flex align-items-center" routerLink="/perfil">
+                      <i class="bi bi-person me-2"></i>Mi Perfil
+                    </a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider border-secondary">
+                  </li>
+                  <li>
+                    <button class="dropdown-item text-danger py-2 d-flex align-items-center" (click)="logout()">
+                      <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            } @else {
+              <a class="btn btn-payibox-login text-dark fw-bold px-4 py-2 text-center d-inline-block w-100 w-lg-auto" routerLink="/login">
+                Iniciar Sesión
+              </a>
+            }
           }
         </li>
 

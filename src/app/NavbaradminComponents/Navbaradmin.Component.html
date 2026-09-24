@@ -25,7 +25,8 @@
       <app-admin-upload *ngIf="mostrarModalSubir" (cerrar)="mostrarModalSubir = false">
       </app-admin-upload>
 
-      <div class="dropdown" *ngIf="authService.currentUser()">
+      <!-- Evaluamos isClient para esperar la lectura síncrona del token -->
+      <div class="dropdown" *ngIf="isClient && authService.currentUser()">
         <button class="btn btn-outline-warning dropdown-toggle d-flex align-items-center gap-2 border-0" type="button"
           id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
           <span class="text-white small">{{ authService.currentUser()?.email }}</span>

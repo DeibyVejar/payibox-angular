@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router'; // 1. Importar Router
+import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AdminUploadComponent } from '../admin-upload/adminuploadcomponents/adminuploadcomponent.component';
 
@@ -11,15 +11,21 @@ import { AdminUploadComponent } from '../admin-upload/adminuploadcomponents/admi
   templateUrl: './Navbaradmin.Component.html',
   styleUrls: ['./Navbaradmin.Component.css']
 })
-export class NavbarAdminComponent {
+export class NavbarAdminComponent implements OnInit {
   public authService = inject(AuthService);
-  private router = inject(Router); // 2. Inyectar el Router
+  private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+
   mostrarModalSubir: boolean = false;
+  isClient: boolean = false;
+
+  ngOnInit(): void {
+    // Retorna true solo cuando ya estamos ejecutando en el navegador
+    this.isClient = isPlatformBrowser(this.platformId);
+  }
 
   logout() {
-    this.authService.logout(); // Borra la sesión
-    
-    // 3. Forzar redirección y recarga para sacar al usuario de inmediato de la vista protegida
+    this.authService.logout();
     this.router.navigate(['/login']).then(() => {
       window.location.reload();
     });
