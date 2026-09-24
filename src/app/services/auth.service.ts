@@ -12,38 +12,51 @@ export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
 
-  // Signal para el usuario con persistencia
+  // 1. Inicialización inmediata desde localStorage normalizando el objeto
   public currentUser = signal<any>(this.getUserFromStorage());
 
-private getUserFromStorage() {
-  if (isPlatformBrowser(this.platformId)) {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      const userObj = JSON.parse(savedUser);
-      const userDetails = userObj?.user || userObj;
-      const identificador = userDetails.username || userDetails.email;
-
-      if (userDetails.is_admin === true || identificador?.toLowerCase().trim() === 'admin@gmail.com') {
-        userObj.role = 'admin';
-      } else {
-        userObj.role = 'user';
+  private getUserFromStorage() {
+    if (isPlatformBrowser(this.platformId)) {
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        try {
+          const parsed = JSON.parse(savedUser);
+          return this.normalizeUser(parsed);
+        } catch (e) {
+          console.error('Error al parsear el usuario almacenado:', e);
+          return null;
+        }
       }
-      return userObj;
     }
+    return null;
   }
-  return null;
-}
-  // --- MÉTODO DE REGISTRO (Faltaba en tu última versión) ---
+
+  // 2. Normaliza la estructura para que email, role y demás campos estén en la raíz
+  private normalizeUser(userData: any) {
+    if (!userData) return null;
+
+    const details = userData.user || userData;
+    const email = details.email || userData.email || '';
+    const username = details.username || (email ? email.split('@')[0] : '');
+    const isAdmin = details.is_admin === true || email.toLowerCase().trim() === 'admin@gmail.com';
+
+    return {
+      ...userData,
+      ...details,
+      email: email,
+      username: username,
+      role: isAdmin ? 'admin' : 'user',
+      is_admin: isAdmin
+    };
+  }
+
   register(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}users/register/`, userData);
   }
 
-  // --- MÉTODO DE LOGIN ---
-login(credentials: any): Observable<any> {
+  login(credentials: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}users/login/`, credentials).pipe(
       tap(response => {
-        // Importante: Pasamos la 'response' completa (que contiene el objeto user)
-        // para que setUser pueda encontrar el email donde sea que esté.
         if (response) {
           this.setUser(response); 
         }
@@ -51,33 +64,25 @@ login(credentials: any): Observable<any> {
     );
   }
 
-setUser(userData: any) {
-  // 1. Extraemos los datos del usuario (buscando en username o email)
-  const userDetails = userData?.user || userData;
-  const identificador = userDetails.username || userDetails.email;
-  
-  // 2. Lógica basada en tu modelo de Django
-  // Priorizamos is_admin, pero validamos también el username
-  if (userDetails.is_admin === true || identificador?.toLowerCase().trim() === 'admin@gmail.com') {
-    userData.role = 'admin';
-  } else {
-    userData.role = 'user';
-  }
+  setUser(userData: any) {
+    const normalizedUser = this.normalizeUser(userData);
 
-  // 3. Guardamos el objeto ya con el rol correcto
-  this.currentUser.set(userData);
-  
-  if (isPlatformBrowser(this.platformId)) {
-    localStorage.setItem('user', JSON.stringify(userData));
+    // Guardamos el objeto plano en el Signal y en localStorage
+    this.currentUser.set(normalizedUser);
+    
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+      if (normalizedUser?.access) {
+        localStorage.setItem('access', normalizedUser.access);
+      }
+    }
   }
-}
-
-  
 
   logout() {
     this.currentUser.set(null);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('user');
+      localStorage.removeItem('access');
       localStorage.removeItem('access_token');
     }
   }
