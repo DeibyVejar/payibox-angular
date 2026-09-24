@@ -1,23 +1,33 @@
 /* Login.component.css - CSS Vanilla */
 
+/* Permite que el elemento personalizado de Angular se estire en Flexbox */
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  width: 100%;
+}
+
 /* Contenedor principal centrado */
 .login-wrapper {
   background-color: #121212; /* Fondo oscuro global */
-  min-height: 120vh; /* Ocupa toda la altura */
+  flex: 1 0 auto; /* Crece para ocupar todo el alto disponible */
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 40px 20px;
+  box-sizing: border-box;
 }
 
 /* Caja del formulario con sombra suave */
 .login-box {
-  background-color: #1e1e1e; /* Fondo de la caja ligeramente más claro */
+  background-color: #1e1e1e;
   padding: 40px;
   border-radius: 12px;
   width: 100%;
-  max-width: 450px; /* Ancho máximo para que se vea bien */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3); /* Efecto de elevación */
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 /* Estilos de tipografía */
@@ -34,7 +44,7 @@
 .w-100 { width: 100%; }
 .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
 
-/* Inputs personalizados (Fondo oscuro, borde sutil) */
+/* Inputs personalizados */
 .form-control-custom {
   display: block;
   width: 100%;
@@ -45,12 +55,12 @@
   border: 1px solid #444;
   border-radius: 8px;
   transition: border-color 0.15s, box-shadow 0.15s;
-  box-sizing: border-box; /* Importante para el padding */
+  box-sizing: border-box;
 }
 
 .form-control-custom:focus {
   outline: 0;
-  border-color: #ffc107; /* Borde dorado al hacer foco */
+  border-color: #ffc107;
   box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.25);
 }
 
@@ -60,7 +70,7 @@
   font-size: 0.9rem;
 }
 
-/* Checkbox (Vanilla) */
+/* Checkbox */
 .form-check {
   display: flex;
   align-items: center;
@@ -70,19 +80,19 @@
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: #ffc107; /* Color dorado para el check */
+  accent-color: #ffc107;
 }
 .form-check-label {
   cursor: pointer;
   user-select: none;
 }
 
-/* Botón personalizado (Imitando el estilo de Payibox) */
+/* Botón personalizado */
 .btn-primary-custom {
-  color: #212529; /* Texto oscuro */
-  background-color: #ffc107; /* Fondo dorado */
+  color: #212529;
+  background-color: #ffc107;
   border: 1px solid #ffc107;
-  border-radius: 20px; /* Bordes redondeados */
+  border-radius: 20px;
   font-weight: 700;
   font-size: 1.1rem;
   cursor: pointer;
@@ -95,10 +105,10 @@
 }
 
 .btn-primary-custom:active {
-  transform: translateY(1px); /* Efecto de presionado */
+  transform: translateY(1px);
 }
 
-/* Enlaces (Estilo minimalista) */
+/* Enlaces */
 .link-muted {
   color: #bbb;
   text-decoration: none;
@@ -106,8 +116,6 @@
 }
 
 .link-muted:hover {
-  color: #ffc107; /* Se vuelve dorado al pasar el mouse */
+  color: #ffc107;
   text-decoration: underline;
 }
-
-

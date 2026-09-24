@@ -1,13 +1,23 @@
-/* Login.component.css / Register.component.css */
+/* Register.component.css */
+
+/* Permite que el elemento personalizado de Angular se estire en Flexbox */
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  width: 100%;
+}
 
 /* Contenedor principal centrado */
 .login-wrapper {
   background-color: #121212; 
-  min-height: 100vh; /* Ajustado de 120vh a 100vh para evitar scroll innecesario */
+  flex: 1 0 auto; /* Removido el min-height: 100vh para permitir flex estéril */
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 40px 20px;
+  box-sizing: border-box;
 }
 
 /* Quitar línea blanca del Navbar */
@@ -17,9 +27,6 @@
   box-shadow: none !important;
 }
 
-/* Caja del formulario - DIMENSIONES IGUALES AL LOGIN */
-
-
 /* Estilos de tipografía y Utilidades */
 .text-light { color: #f8f9fa; }
 .text-muted { color: #888; }
@@ -27,7 +34,7 @@
 .fw-bold { font-weight: 700; }
 .text-center { text-align: center; }
 
-/* Márgenes compactos para evitar scroll */
+/* Márgenes compactos */
 .mb-2 { margin-bottom: 0.5rem; }
 .mb-3 { margin-bottom: 1rem; }
 .mb-4 { margin-bottom: 1.5rem; }
@@ -40,8 +47,8 @@
 /* Inputs personalizados */
 .form-control-custom {
   display: block;
-  width: 100%;
-  padding: 10px 15px; /* Ligeramente más compacto */
+  width: 100% !important;
+  padding: 10px 15px;
   font-size: 0.95rem;
   color: #fff;
   background-color: #2c2c2c;
@@ -81,16 +88,15 @@
 
 /* Botón Payibox Estilo Login */
 .btn-primary-custom {
-  color: #212529; /* Texto oscuro */
-  background-color: #ffc107; /* Fondo dorado */
+  color: #212529;
+  background-color: #ffc107;
   border: 1px solid #ffc107;
-  border-radius: 20px; /* Bordes redondeados */
+  border-radius: 20px;
   font-weight: 700;
   font-size: 1.1rem;
   cursor: pointer;
   transition: background-color 0.15s, transform 0.1s;
 }
-
 
 .btn-primary-custom:hover {
   background-color: #e0a800;
@@ -114,16 +120,7 @@
 }
 
 .underline { text-decoration: underline; }
-.login-box {
-  background-color: #1e1e1e; /* Fondo de la caja ligeramente más claro */
-  padding: 40px;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 450px; /* Ancho máximo para que se vea bien */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3); /* Efecto de elevación */
-}
 
-/* Fuerza la simetría con el Login */
 .login-container {
   display: flex;
   justify-content: center;
@@ -131,31 +128,22 @@
 }
 
 .login-box {
+  background-color: #1e1e1e;
   flex: 0 0 500px; 
   width: 500px;
   min-width: 320px;
-  /* CAMBIO AQUÍ: Reducimos de 5.5rem a 1.5rem o 2rem */
   padding: 1.5rem 2rem; 
   box-sizing: border-box;
-  background-color: #1a1a1a; /* Asegúrate de que el fondo sea oscuro */
   border-radius: 12px;
-}
-
-/* Asegura que los campos de texto estiren la caja */
-.form-control-custom {
-  width: 100% !important;
-  display: block;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 nav {
   overflow: visible !important;
 }
 
-/* Register.component.css */
-
-/* Recomiendo añadir esta clase a la etiqueta <img> en tu HTML */
 .gym-logo {
-  position: relative; /* Necesario para que el z-index funcione */
-  z-index: 101; /* Debe ser mayor que el z-index del navbar del Paso 1 (que pusimos en 100) */
-  margin-top: -30px; /* Opcional: Esto lo empuja un poco más hacia arriba si quieres que sobresalga más */
+  position: relative;
+  z-index: 101;
+  margin-top: -30px;
 }
