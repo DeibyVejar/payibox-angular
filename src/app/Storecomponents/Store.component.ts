@@ -54,7 +54,7 @@ export class StoreComponent implements OnInit, OnDestroy {
   }
 
   // Getter que filtra la lista de productos actual en tiempo real
-  get productosFiltrados(): Product[] {
+get productosFiltrados(): Product[] {
     if (this.categoriaSeleccionada === 'todos') {
       return this.products;
     }
@@ -62,8 +62,9 @@ export class StoreComponent implements OnInit, OnDestroy {
     const palabrasBuscadas = this.palabrasClaveCategorias[this.categoriaSeleccionada] || [];
 
     return this.products.filter(product => {
-      const nombre = (product.name || (product as any).nombre || '').toLowerCase();
-      const descripcion = (product.description || (product as any).descripcion || '').toLowerCase();
+      const p = product as any;
+      const nombre = (p.name || p.nombre || '').toLowerCase();
+      const descripcion = (p.description || p.descripcion || '').toLowerCase();
 
       return palabrasBuscadas.some(palabra =>
         nombre.includes(palabra) || descripcion.includes(palabra)
