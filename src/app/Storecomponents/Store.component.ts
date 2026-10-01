@@ -24,7 +24,7 @@ export class StoreComponent implements OnInit, OnDestroy {
     franelas: ['franela', 'camisa', 'top', 't-shirt', 'playera', 'remera', 'sweater'],
     shorts: ['short', 'pantalón corto', 'pantaloneta', 'bermuda'],
     faldas: ['falda', 'skirt'],
-    accesorios: ['gorra', 'termo', 'vaso', 'botella','guantes', 'cinturon', 'cinto', 'mochila', 'bolso', 'banda', 'strap', 'medias']
+    accesorios: ['gorra', 'termo', 'vaso', 'cinturón', 'muñequeras', 'toalla', 'botella','guantes', 'cinturon', 'cinto', 'mochila', 'bolso', 'banda', 'strap', 'medias']
   };
 
   cartService = inject(CartService);
