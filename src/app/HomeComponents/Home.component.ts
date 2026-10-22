@@ -1,17 +1,25 @@
-import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [], // Aquí irían módulos como CommonModule si los necesitas
+  imports: [RouterLink], // <-- REGISTRADO AQUÍ
   templateUrl: './Home.component.html',
   styleUrl: './Home.component.css'
 })
 export class HomeComponent {
+  private router = inject(Router);
+
+  // Método para la navegación forzada
+  navegarA(ruta: string): void {
+    this.router.navigate([ruta]);
+  }
+
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
   forceClose(menu: HTMLElement, event: Event) {
     event.preventDefault(); // Detiene el salto del '#'
 
@@ -36,4 +44,3 @@ export class HomeComponent {
     }, 10);
   }
 }
-
