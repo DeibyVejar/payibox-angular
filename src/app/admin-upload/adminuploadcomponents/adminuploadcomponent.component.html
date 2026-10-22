@@ -17,13 +17,13 @@
              
           <div class="chip" 
                [class.selected]="form.value.categoria === 'suplementos'" 
-               (click)="seleccionarCategoria('suplementos')">💊 Suplementos</div>
+               (click)="seleccionarCategoria('suplementos')"> Suplementos</div>
           <div class="chip" 
                [class.selected]="form.value.categoria === 'accesorios'" 
-               (click)="seleccionarCategoria('accesorios')">⌚ Accesorios</div>
+               (click)="seleccionarCategoria('accesorios')"> Accesorios</div>
           <div class="chip" 
                [class.selected]="form.value.categoria === 'ropa'" 
-               (click)="seleccionarCategoria('ropa')">👕 Ropa</div>
+               (click)="seleccionarCategoria('ropa')"> Ropa</div>
         </div>
         
         <div class="error-wrapper">
@@ -40,7 +40,7 @@
 
       <div class="file-upload-wrapper">
         <label for="fileInput" class="btn-file-upload">
-          📷 Seleccionar Imagen
+           Seleccionar Imagen
         </label>
         <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
         <small class="error-msg" *ngIf="form.get('imagen')?.invalid && form.get('imagen')?.touched">* Imagen requerida</small>

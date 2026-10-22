@@ -1,0 +1,186 @@
+.planes-wrapper {
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Línea de acento al lado de los títulos de sección */
+.section-accent-line {
+  width: 6px;
+  height: 24px;
+  background-color: #ffc107;
+  border-radius: 3px;
+}
+
+.badge-brand {
+  background-color: #121212;
+  color: #ffc107;
+  letter-spacing: 1px;
+  font-weight: 700;
+  border-radius: 6px;
+}
+
+/* Estructura base de las tarjetas */
+.plan-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.75rem;
+  position: relative;
+  transition: all 0.25s ease-in-out;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  border-color: #cbd5e1;
+}
+
+/* Tarjeta destacada (Plan Mensual) */
+.plan-card.featured {
+  border: 2px solid #ffc107;
+  background: linear-gradient(180deg, #ffffff 0%, #fffdf5 100%);
+}
+
+.featured-tag {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background: #ffc107;
+  color: #121212;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* Tarjeta Oscura (CrossFit) */
+.plan-card.dark-card {
+  background-color: #121212;
+  color: #ffffff;
+  border-color: #27272a;
+}
+
+/* Tipografía interna */
+.plan-subtitle {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #64748b;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.plan-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.plan-desc {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+/* Muestra de Precio */
+.plan-price {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.plan-price .currency {
+  font-size: 1.2rem;
+  vertical-align: super;
+  font-weight: 700;
+  color: #d97706;
+}
+
+.plan-price .period {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0;
+}
+
+.feature-item {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+/* Cajas de Combo */
+.combo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.combo-item {
+  background: #18181b;
+  border: 1px solid #27272a;
+  padding: 14px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.combo-item.active-combo {
+  border-color: #ffc107;
+  background: #27272a;
+}
+
+.price-text {
+  font-size: 1.1rem;
+}
+
+.combo-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 14px;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.combo-box:hover {
+  background: #f1f5f9;
+}
+
+.highlighted-combo {
+  background: #fffbeb;
+  border: 1.5px solid #ffc107;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Tablas limpias para Spinning */
+.custom-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  border-bottom-width: 1px;
+  padding-bottom: 12px;
+}
+
+.custom-table td {
+  padding: 12px 8px;
+  font-size: 0.9rem;
+  border-bottom-color: #f1f5f9;
+}
+
+.table-warning-row {
+  background-color: #fffbeb !important;
+}
+.text-warning {
+  color: #ffc107 !important; /* Amarillo oficial de Payibox */
+}

@@ -7,9 +7,13 @@
 
 /* Tarjetas idénticas a tus bloques de facturas */
 .stock-card {
-  border: 1px solid #eef0f2 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #ffffff;
+    border: 1px solid #eeeeee;
+    border-left: 5px solid #ffc107; /* Acento principal */
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .stock-card:hover {

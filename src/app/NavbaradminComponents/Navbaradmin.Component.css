@@ -6,7 +6,7 @@
 }
 
 .custom-navbar {
-    background-color: rgba(18, 18, 18, 0.95);
+    background-color: #212529 !important;
     backdrop-filter: blur(10px);
     height: 70px; /* Altura estándar de tu navbar original */
 }

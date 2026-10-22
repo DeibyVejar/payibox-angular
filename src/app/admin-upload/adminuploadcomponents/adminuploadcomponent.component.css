@@ -36,6 +36,13 @@
   border-radius: 10px !important;
   box-sizing: border-box !important;
   display: block !important;
+  transition: border-color 0.2s ease-in-out !important;
+}
+
+.input-field:hover, 
+.input-field:focus {
+  border-color: #ffc107 !important;
+  outline: none !important; /* Evita el borde resaltado por defecto del navegador al hacer clic */
 }
 
 .opciones-cat { 
@@ -50,6 +57,13 @@
   border-radius: 20px !important;
   cursor: pointer !important;
   background: #f8f8f8 !important;
+  transition: all 0.2s ease-in-out !important; /* Suaviza el cambio de color */
+}
+
+.chip:hover {
+  background: #ffc107 !important;
+  border-color: #ffc107 !important;
+  color: #000 !important;
 }
 
 .chip.selected {

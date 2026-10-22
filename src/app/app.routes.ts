@@ -9,8 +9,9 @@ import { SeccionNosotrosComponent } from './Storecomponents/seccion-nosotros/sec
 import { AdminUploadComponent } from './admin-upload/adminuploadcomponents/adminuploadcomponent.component';
 import { StockComponent } from './stock-item/stock-item.component';
 import { UsersComponent } from './usuarios-componente/usuarios-componente.component';
-import { AccesoDenegadoComponent } from './acceso-denegado/acceso-denegado.component'; // Importar
+import { AccesoDenegadoComponent } from './acceso-denegado/acceso-denegado.component';
 import { adminGuard } from './guards/admin.guard';
+import { PlanesComponent } from './planes/planes.component';
 
 export const routes: Routes = [
   { path: 'perfil', component: PerfilComponent },
@@ -18,14 +19,17 @@ export const routes: Routes = [
   { path: 'store', component: StoreComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: '', component: HomeComponent },      
-  { path: "nosotros", component: SeccionNosotrosComponent }, 
-  { path: 'acceso-denegado', component: AccesoDenegadoComponent }, // Ruta pública de error
+  { path: 'nosotros', component: SeccionNosotrosComponent }, 
+  { path: 'planes', component: PlanesComponent },
+  { path: 'acceso-denegado', component: AccesoDenegadoComponent },
+
+  // Se añade pathMatch: 'full' para que no coincida parcialmente con '/planes' u otras rutas
+  { path: '', component: HomeComponent, pathMatch: 'full' },
 
   // Rutas protegidas exclusivamente para admin
-  { path: "adminuploadcomponent", component: AdminUploadComponent, canActivate: [adminGuard] },
-  { path: "stock", component: StockComponent, canActivate: [adminGuard] }, 
-  { path: "usuarios", component: UsersComponent, canActivate: [adminGuard] },
+  { path: 'adminuploadcomponent', component: AdminUploadComponent, canActivate: [adminGuard] },
+  { path: 'stock', component: StockComponent, canActivate: [adminGuard] }, 
+  { path: 'usuarios', component: UsersComponent, canActivate: [adminGuard] },
 
   { path: '**', redirectTo: '' }
 ];
