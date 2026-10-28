@@ -1,15 +1,27 @@
-@if (!isAuthPage) {
-  @if (isClient) {
+@if (isClient) {
+  <!-- Navbar solo fuera de páginas de auth -->
+  @if (!isAuthPage) {
     @if (authService.currentUser()?.role === 'admin') {
       <app-navbar-admin></app-navbar-admin>
     } @else {
       <app-navbar></app-navbar>
     }
   }
+
+  <!-- Contenido principal -->
+  <main [ngClass]="isAuthPage ? 'p-0 m-0 flex-grow-1' : 'container flex-grow-1'">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer solo fuera de páginas de auth -->
+  @if (!isAuthPage) {
+    <app-footer></app-footer>
+  }
+} @else {
+  <!-- Estado neutro durante SSR / Hidratación para evitar saltos de interfaz -->
+  <div class="d-flex justify-content-center align-items-center vh-100 bg-dark text-warning">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
 }
-
-<main [ngClass]="isAuthPage ? 'p-0 m-0 flex-grow-1' : 'container  flex-grow-1'">
-  <router-outlet></router-outlet>
-</main>
-
-<app-footer></app-footer>
