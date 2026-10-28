@@ -1,55 +1,66 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="container mt-5 pt-5 text-center" style="max-width: 400px;">
-      <h3 class="fw-bold mb-3 text-light">Nueva Contraseña</h3>
-      <p class="text-muted small">Ingresa y confirma tu nueva clave de acceso.</p>
-      
-      <form (ngSubmit)="onSubmit()">
-        <div class="mb-3 text-start">
-          <input 
-            type="password" 
-            class="form-control" 
-            placeholder="Nueva contraseña" 
-            [(ngModel)]="password" 
-            name="password" 
-            required 
-            minlength="6"
-          />
+    <div class="login-wrapper d-flex align-items-center justify-content-center min-vh-100">
+      <div class="login-container w-100" style="max-width: 420px; padding: 20px;">
+        <div class="login-box text-center">
+          
+          <!-- Logo de Payibox -->
+          <img routerLink="" src="/images/payiboxlogo2.png" alt="Payibox Logo" class="mb-3" style="width: 120px; cursor: pointer;">
+          
+          <h2 class="h3 fw-bold text-light mb-2">Nueva Contraseña</h2>
+          <p class="text-light-50 small mb-4" style="color: #ccc;">Ingresa y confirma tu nueva clave de acceso.</p>
+          
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group mb-3 text-start">
+              <label class="form-label text-light small">Nueva contraseña</label>
+              <input 
+                type="password" 
+                class="form-control form-control-custom" 
+                placeholder="Mínimo 6 caracteres" 
+                [(ngModel)]="password" 
+                name="password" 
+                required 
+                minlength="6"
+              />
+            </div>
+
+            <div class="form-group mb-3 text-start">
+              <label class="form-label text-light small">Confirmar contraseña</label>
+              <input 
+                type="password" 
+                class="form-control form-control-custom" 
+                placeholder="Repite tu contraseña" 
+                [(ngModel)]="confirmPassword" 
+                name="confirmPassword" 
+                required 
+              />
+              <div *ngIf="confirmPassword && password !== confirmPassword" class="text-danger small mt-1">
+                Las contraseñas no coinciden.
+              </div>
+            </div>
+
+            <button 
+              class="btn-primary-custom w-100 py-3 mt-3 fw-bold" 
+              type="submit" 
+              [disabled]="loading || !password || password !== confirmPassword"
+            >
+              {{ loading ? 'Guardando...' : 'Cambiar Contraseña' }}
+            </button>
+          </form>
+
+          <div *ngIf="message" class="alert alert-info mt-4 small">{{ message }}</div>
+
         </div>
-
-        <div class="mb-3 text-start">
-          <input 
-            type="password" 
-            class="form-control" 
-            placeholder="Confirmar contraseña" 
-            [(ngModel)]="confirmPassword" 
-            name="confirmPassword" 
-            required 
-          />
-          <div *ngIf="confirmPassword && password !== confirmPassword" class="text-danger small mt-1">
-            Las contraseñas no coinciden.
-          </div>
-        </div>
-
-        <button 
-          class="btn btn-warning fw-bold w-100 py-2" 
-          type="submit" 
-          [disabled]="loading || !password || password !== confirmPassword"
-        >
-          {{ loading ? 'Guardando...' : 'Cambiar Contraseña' }}
-        </button>
-      </form>
-
-      <div *ngIf="message" class="alert alert-info mt-3 small">{{ message }}</div>
+      </div>
     </div>
   `
 })
