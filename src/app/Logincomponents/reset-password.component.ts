@@ -9,57 +9,56 @@ import { AuthService } from '../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="login-wrapper d-flex align-items-center justify-content-center min-vh-100">
-      <div class="login-container w-100" style="max-width: 420px; padding: 20px;">
-        <div class="login-box text-center">
-          
-          <!-- Logo de Payibox -->
-          <img routerLink="" src="/images/payiboxlogo2.png" alt="Payibox Logo" class="mb-3" style="width: 120px; cursor: pointer;">
-          
-          <h2 class="h3 fw-bold text-light mb-2">Nueva Contraseña</h2>
-          <p class="text-light-50 small mb-4" style="color: #ccc;">Ingresa y confirma tu nueva clave de acceso.</p>
-          
-          <form (ngSubmit)="onSubmit()">
-            <div class="form-group mb-3 text-start">
-              <label class="form-label text-light small">Nueva contraseña</label>
-              <input 
-                type="password" 
-                class="form-control form-control-custom" 
-                placeholder="Mínimo 6 caracteres" 
-                [(ngModel)]="password" 
-                name="password" 
-                required 
-                minlength="6"
-              />
+    <div class="d-flex align-items-center justify-content-center min-vh-100 px-3">
+      <div class="p-4 text-center" style="max-width: 400px; width: 100%; background: #18181b; border-radius: 12px; border: 1px solid #27272a; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        
+        <!-- Logo de Payibox -->
+        <img routerLink="" src="/images/payiboxlogo2.png" alt="Payibox Logo" class="mb-3" style="width: 100px; cursor: pointer;">
+        
+        <h3 class="fw-bold mb-1 text-light">Nueva Contraseña</h3>
+        <p class="small mb-4" style="color: #a1a1aa;">Ingresa y confirma tu nueva clave de acceso.</p>
+        
+        <form (ngSubmit)="onSubmit()">
+          <div class="mb-3 text-start">
+            <label class="form-label text-light small fw-semibold">Nueva contraseña</label>
+            <input 
+              type="password" 
+              class="form-control bg-dark text-light border-secondary shadow-none" 
+              placeholder="Mínimo 6 caracteres" 
+              [(ngModel)]="password" 
+              name="password" 
+              required 
+              minlength="6"
+              style="border-color: #3f3f46 !important;"
+            />
+          </div>
+
+          <div class="mb-3 text-start">
+            <label class="form-label text-light small fw-semibold">Confirmar contraseña</label>
+            <input 
+              type="password" 
+              class="form-control bg-dark text-light border-secondary shadow-none" 
+              placeholder="Repite tu contraseña" 
+              [(ngModel)]="confirmPassword" 
+              name="confirmPassword" 
+              required 
+              style="border-color: #3f3f46 !important;"
+            />
+            <div *ngIf="confirmPassword && password !== confirmPassword" class="text-danger small mt-1" style="font-size: 0.8rem;">
+              Las contraseñas no coinciden.
             </div>
+          </div>
 
-            <div class="form-group mb-3 text-start">
-              <label class="form-label text-light small">Confirmar contraseña</label>
-              <input 
-                type="password" 
-                class="form-control form-control-custom" 
-                placeholder="Repite tu contraseña" 
-                [(ngModel)]="confirmPassword" 
-                name="confirmPassword" 
-                required 
-              />
-              <div *ngIf="confirmPassword && password !== confirmPassword" class="text-danger small mt-1">
-                Las contraseñas no coinciden.
-              </div>
-            </div>
+          <button 
+            class="btn btn-warning fw-bold w-100 py-2 mt-2" 
+            type="submit" 
+            [disabled]="loading || !password || password !== confirmPassword"
+          >
+            {{ loading ? 'Guardando...' : 'Cambiar Contraseña' }}
+          </button>
+        </form>
 
-            <button 
-              class="btn-primary-custom w-100 py-3 mt-3 fw-bold" 
-              type="submit" 
-              [disabled]="loading || !password || password !== confirmPassword"
-            >
-              {{ loading ? 'Guardando...' : 'Cambiar Contraseña' }}
-            </button>
-          </form>
-
-          <div *ngIf="message" class="alert alert-info mt-4 small">{{ message }}</div>
-
-        </div>
+        <div *ngIf="message" class="alert alert-info mt-3 small text-start">{{ message }}</div>
       </div>
     </div>
   `
