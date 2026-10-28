@@ -1,10 +1,12 @@
-import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { AuthService } from './services/auth.service'; // Ajusta la ruta si es necesario
-import { NavbarComponent } from './Navbar.Component/navbar.component'; // Ajusta las rutas de tus componentes
-import { NavbaradminComponents } from './NavbaradminComponents/navbaradmin.component';
+import { AuthService } from './services/auth.service';
+
+import { NavbarComponent } from './Navbar.Component/Navbar.Component'; 
+// 👈 Nombre corregido a 'NavbarAdminComponent'
+import { NavbarAdminComponent } from './NavbaradminComponents/Navbaradmin.Component'; 
 import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
@@ -14,7 +16,7 @@ import { FooterComponent } from './components/footer/footer.component';
     RouterOutlet, 
     CommonModule, 
     NavbarComponent, 
-    NavbaradminComponents, 
+    NavbarAdminComponent, // 👈 Nombre corregido aquí también
     FooterComponent
   ],
   templateUrl: './app.component.html',
@@ -32,13 +34,11 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.isClient = true;
 
-      // Escuchar cambios de ruta para detectar páginas de autenticación
       this.router.events.pipe(
         filter(event => event instanceof NavigationEnd)
       ).subscribe((event: NavigationEnd) => {
         const url = event.urlAfterRedirects || event.url;
         
-        // Rutas donde se ocultarán el Navbar y el Footer
         this.isAuthPage = [
           '/login', 
           '/register', 
