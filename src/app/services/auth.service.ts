@@ -64,6 +64,15 @@ export class AuthService {
     );
   }
 
+  // 3. Recuperación de contraseña
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}users/password-reset/`, { email });
+  }
+
+  confirmPasswordReset(data: { uid: string; token: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}users/password-reset-confirm/`, data);
+  }
+
   setUser(userData: any) {
     const normalizedUser = this.normalizeUser(userData);
 

@@ -12,6 +12,8 @@ import { UsersComponent } from './usuarios-componente/usuarios-componente.compon
 import { AccesoDenegadoComponent } from './acceso-denegado/acceso-denegado.component';
 import { adminGuard } from './guards/admin.guard';
 import { PlanesComponent } from './planes/planes.component';
+import { ForgotPasswordComponent } from './Logincomponents/forgot-password.component';
+import { ResetPasswordComponent } from './Logincomponents/reset-password.component';
 
 export const routes: Routes = [
   { path: 'perfil', component: PerfilComponent },
@@ -22,6 +24,8 @@ export const routes: Routes = [
   { path: 'nosotros', component: SeccionNosotrosComponent }, 
   { path: 'planes', component: PlanesComponent },
   { path: 'acceso-denegado', component: AccesoDenegadoComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password/:uid/:token', component: ResetPasswordComponent },
 
   // Se añade pathMatch: 'full' para que no coincida parcialmente con '/planes' u otras rutas
   { path: '', component: HomeComponent, pathMatch: 'full' },
