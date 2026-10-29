@@ -1,49 +1,77 @@
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg fade-in">
+    <div class="modal-content border-0 shadow-lg fade-in" style="background: #18181b; color: #fff;">
       <div class="modal-body p-4">
 
+        <!-- MENÚ DE SELECCIÓN -->
         <div *ngIf="view === 'menu'" class="payment-options d-grid gap-3">
-          <h5 class="fw-bold mb-3 text-center">Selecciona tu método de pago</h5>
+          <h5 class="fw-bold mb-3 text-center text-light">Selecciona tu método de pago</h5>
           <button (click)="seleccionarMetodo('bancolombia')"
-            class="btn btn-outline-primary p-3 d-flex justify-content-between">
-            <span>Bancolombia</span> <i class="bi bi-bank"></i>
+            class="btn btn-outline-primary p-3 d-flex justify-content-between align-items-center">
+            <span>Bancolombia (COP)</span> <i class="bi bi-bank fs-5"></i>
           </button>
           <button (click)="seleccionarMetodo('nacional')"
-            class="btn btn-outline-success p-3 d-flex justify-content-between">
-            <span>Transferencia Nacional</span> <i class="bi bi-credit-card"></i>
+            class="btn btn-outline-success p-3 d-flex justify-content-between align-items-center">
+            <span>Transferencia Nacional / Pago Móvil (Bs)</span> <i class="bi bi-credit-card fs-5"></i>
           </button>
           <button (click)="seleccionarMetodo('efectivo')"
-            class="btn btn-outline-warning p-3 d-flex justify-content-between">
-            <span>Efectivo</span> <i class="bi bi-cash"></i>
+            class="btn btn-outline-warning p-3 d-flex justify-content-between align-items-center">
+            <span>Efectivo</span> <i class="bi bi-cash fs-5"></i>
           </button>
         </div>
 
+        <!-- DETALLE DE PAGO -->
         <div *ngIf="view === 'transferencia'" class="fade-in">
-          <h5 class="fw-bold text-uppercase mb-3">{{ selectedBank }}</h5>
+          <h5 class="fw-bold text-uppercase mb-3 text-warning">
+            {{ selectedBank === 'nacional' ? 'Transferencia Nacional / Pago Móvil' : selectedBank }}
+          </h5>
 
-          <div *ngIf="selectedBank !== 'efectivo'" class="card bg-light p-3 mb-3">
-            <p><strong>Número:</strong> {{ cuentas[selectedBank]?.numero }}</p>
-            <p><strong>Titular:</strong> {{ cuentas[selectedBank]?.titular }}</p>
+          <!-- Datos bancarios de la cuenta -->
+          <div *ngIf="selectedBank !== 'efectivo'" class="card p-3 mb-3 border-0" style="background: #27272a; color: #fff;">
+            <p class="mb-1"><strong>Número:</strong> {{ cuentas[selectedBank]?.numero }}</p>
+            <p class="mb-0"><strong>Titular:</strong> {{ cuentas[selectedBank]?.titular }}</p>
+          </div>
+
+          <!-- BLOQUE DE CONVERSIÓN MONETARIA PARA TRANSFERENCIA NACIONAL -->
+          <div *ngIf="selectedBank === 'nacional'" class="p-3 mb-3 rounded" style="background: #09090b; border: 1px solid #27272a;">
+            <div class="d-flex justify-content-between text-light small mb-1">
+              <span>Monto en Pesos:</span>
+              <strong>${{ totalCOP | number:'1.0-0' }} COP</strong>
+            </div>
+
+            <div class="d-flex justify-content-between text-muted small mb-2">
+              <span>Tasa del día:</span>
+              <span>1 COP = {{ tasaBs }} Bs.</span>
+            </div>
+
+            <hr class="my-2" style="border-color: #27272a;">
+
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-light fw-bold small">Monto exacto a transferir:</span>
+              <span class="fs-5 text-warning fw-bold">
+                Bs. {{ (totalCOP * tasaBs) | number:'1.2-2' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Campos del formulario -->
+          <div class="mb-3">
+            <label class="small fw-bold text-light">Número de Orden:</label>
+            <input type="text" [value]="orderNumber" readonly class="form-control bg-dark text-light border-secondary">
           </div>
 
           <div class="mb-3">
-            <label class="small fw-bold">Número de Orden:</label>
-            <input type="text" [value]="orderNumber" readonly class="form-control bg-light">
-          </div>
-
-          <div class="mb-3">
-            <label class="small fw-bold">Titular:</label>
-            <input type="text" [value]="nombreTitular" readonly class="form-control bg-light">
+            <label class="small fw-bold text-light">Titular:</label>
+            <input type="text" [value]="nombreTitular" readonly class="form-control bg-dark text-light border-secondary">
           </div>
 
           <div *ngIf="selectedBank !== 'efectivo'" class="mb-3">
-            <label class="small fw-bold">Comprobante:</label>
-            <input type="file" (change)="onFileSelected($event)" class="form-control" accept="image/*">
+            <label class="small fw-bold text-light">Comprobante de pago:</label>
+            <input type="file" (change)="onFileSelected($event)" class="form-control bg-dark text-light border-secondary" accept="image/*">
           </div>
 
-          <button (click)="procesarCompra()" class="btn btn-warning w-100 fw-bold">FINALIZAR COMPRA</button>
-          <button (click)="volver()" class="btn btn-link w-100 text-dark">Volver</button>
+          <button (click)="procesarCompra()" class="btn btn-warning w-100 fw-bold py-2 mt-2">FINALIZAR COMPRA</button>
+          <button (click)="volver()" class="btn btn-link w-100 text-secondary mt-1">Volver</button>
         </div>
 
       </div>
