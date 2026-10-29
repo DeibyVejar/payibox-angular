@@ -16,15 +16,22 @@
       </ul>
     </div>
 
-    <div class="d-flex align-items-center gap-3 ms-3">
+    <div class="d-flex align-items-center gap-2 ms-3">
+      <!-- Botón Tasa de Cambio -->
+      <button class="btn btn-outline-warning fw-bold px-3 py-2" (click)="mostrarModalTasa = true">
+        Tasa COP/Bs
+      </button>
+
+      <!-- Botón Subir Artículo -->
       <button class="btn btn-payibox-login text-dark fw-bold px-2 px-md-4 py-2" (click)="mostrarModalSubir = true">
         Subir Artículo
       </button>
 
+      <!-- Modal de Subir Artículo -->
       <app-admin-upload *ngIf="mostrarModalSubir" (cerrar)="mostrarModalSubir = false">
       </app-admin-upload>
 
-      <!-- Evaluamos isClient para esperar la lectura síncrona del token -->
+      <!-- Dropdown de Usuario -->
       <div class="dropdown" *ngIf="isClient && authService.currentUser()">
         <button class="btn btn-outline-warning dropdown-toggle d-flex align-items-center gap-2 border-0" type="button"
           id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,3 +49,48 @@
     </div>
   </div>
 </nav>
+
+<!-- MODAL FLOTANTE DE TASA DE CAMBIO -->
+<div *ngIf="mostrarModalTasa" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 400px;">
+    <div class="modal-content border-0 shadow-lg" style="background: #18181b; color: #fff; border-radius: 12px; border: 1px solid #27272a !important;">
+      <div class="modal-header border-bottom border-secondary p-3">
+        <h5 class="modal-title fw-bold text-warning fs-6">⚡ Actualizar Tasa del Día</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModalTasa()"></button>
+      </div>
+      <div class="modal-body p-4 text-start">
+        <p class="small text-secondary mb-3" style="font-size: 0.85rem;">
+          Define la equivalencia de 1 Peso (COP) a Bolívares (VES) para el cálculo dinámico en Pago Móvil.
+        </p>
+
+        <div class="mb-3">
+          <label class="form-label text-light small fw-semibold">Tasa Activa</label>
+          <div class="input-group">
+            <span class="input-group-text bg-dark text-light border-secondary">1 COP =</span>
+            <input 
+              type="number" 
+              step="0.0001" 
+              class="form-control bg-dark text-light border-secondary shadow-none" 
+              [(ngModel)]="nuevaTasa" 
+              placeholder="Ej: 0.0095"
+            >
+            <span class="input-group-text bg-dark text-light border-secondary">Bs.</span>
+          </div>
+        </div>
+
+        <button 
+          class="btn btn-warning w-100 fw-bold py-2 mt-2" 
+          type="button" 
+          (click)="actualizarTasa()" 
+          [disabled]="cargandoTasa"
+        >
+          {{ cargandoTasa ? 'Guardando...' : 'Guardar Cambios' }}
+        </button>
+
+        <div *ngIf="mensajeTasa" class="small text-info text-center mt-3 fw-semibold">
+          {{ mensajeTasa }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
