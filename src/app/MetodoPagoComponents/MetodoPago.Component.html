@@ -33,26 +33,28 @@
           </div>
 
           <!-- BLOQUE DE CONVERSIÓN MONETARIA PARA TRANSFERENCIA NACIONAL -->
-          <div *ngIf="selectedBank === 'nacional'" class="p-3 mb-3 rounded" style="background: #09090b; border: 1px solid #27272a;">
-            <div class="d-flex justify-content-between text-light small mb-1">
-              <span>Monto en Pesos:</span>
-              <strong>${{ totalCOP | number:'1.0-0' }} COP</strong>
-            </div>
+<div *ngIf="selectedBank === 'nacional'" class="p-3 mb-3 rounded"
+  style="background: #09090b; border: 1px solid #27272a;">
+  <div class="d-flex justify-content-between text-light small mb-1">
+    <span>Monto en Pesos:</span>
+    <strong class="text-white">${{ totalCOP | number:'1.0-0' }} COP</strong>
+  </div>
 
-            <div class="d-flex justify-content-between text-muted small mb-2">
-              <span>Tasa del día:</span>
-              <span>1 COP = {{ tasaBs }} Bs.</span>
-            </div>
+  <!-- Tasa del día resaltada en gris claro/blanco -->
+  <div class="d-flex justify-content-between small mb-2" style="color: #a1a1aa;">
+    <span>Tasa del día:</span>
+    <span class="fw-semibold text-light">1 COP = {{ tasaBs }} Bs.</span>
+  </div>
 
-            <hr class="my-2" style="border-color: #27272a;">
+  <hr class="my-2" style="border-color: #3f3f46;">
 
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="text-light fw-bold small">Monto exacto a transferir:</span>
-              <span class="fs-5 text-warning fw-bold">
-                Bs. {{ (totalCOP * tasaBs) | number:'1.2-2' }}
-              </span>
-            </div>
-          </div>
+  <div class="d-flex justify-content-between align-items-center">
+    <span class="text-light fw-bold small">Monto exacto a transferir:</span>
+    <span class="fs-5 text-warning fw-bold">
+      Bs. {{ (totalCOP * tasaBs) | number:'1.2-2' }}
+    </span>
+  </div>
+</div>
 
           <!-- Campos del formulario -->
           <div class="mb-3">
