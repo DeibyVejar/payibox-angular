@@ -1,0 +1,27 @@
+.dashboard-container {
+  min-height: 85vh;
+  color: #18181b;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.table th {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.table td {
+  font-size: 0.95rem;
+}
