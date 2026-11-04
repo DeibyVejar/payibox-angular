@@ -1,5 +1,6 @@
-<div class="dashboard-container py-3">
-  <div class="container mt-2">
+<div class="dashboard-container">
+  <!-- Agregamos pt-5 y mt-4 para empujar el contenido debajo del navbar fixed -->
+  <div class="container pt-5 mt-4">
 
     <!-- Encabezado y Botones de Reporte -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
@@ -10,10 +11,10 @@
 
       <div class="d-flex gap-2">
         <button (click)="generarReportePDF('diario')" class="btn btn-outline-dark fw-bold btn-sm px-3">
-          <i class="bi bi-file-earmark-pdf me-1"></i> PDF Diario
+          PDF Diario
         </button>
         <button (click)="generarReportePDF('mensual')" class="btn btn-warning fw-bold btn-sm px-3">
-          <i class="bi bi-file-earmark-bar-graph me-1"></i> PDF Mensual
+          PDF Mensual
         </button>
       </div>
     </div>
