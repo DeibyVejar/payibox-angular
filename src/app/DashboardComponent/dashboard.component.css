@@ -1,6 +1,7 @@
 .dashboard-container {
   min-height: 85vh;
   color: #18181b;
+  padding-top: 100px; /* Ajuste para que el Navbar fijo no tape el encabezado */
 }
 
 .tracking-wider {
