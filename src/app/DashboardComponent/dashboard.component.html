@@ -1,0 +1,88 @@
+<div class="dashboard-container py-3">
+  <div class="container mt-4">
+
+    <!-- Encabezado y Botones de Reporte -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+      <div class="mb-3 mb-md-0">
+        <h2 class="fw-bold text-dark mb-1 text-uppercase tracking-wider">Dashboard de Ventas</h2>
+        <p class="text-muted small mb-0">Métricas principales, artículos populares y reportes ejecutivos</p>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button (click)="generarReportePDF('diario')" class="btn btn-outline-dark fw-bold btn-sm px-3">
+          <i class="bi bi-file-earmark-pdf me-1"></i> PDF Diario
+        </button>
+        <button (click)="generarReportePDF('mensual')" class="btn btn-warning fw-bold btn-sm px-3">
+          <i class="bi bi-file-earmark-bar-graph me-1"></i> PDF Mensual
+        </button>
+      </div>
+    </div>
+
+    <!-- Indicador de Carga -->
+    <div *ngIf="cargando" class="text-center my-5">
+      <div class="spinner-border text-warning" role="status"></div>
+    </div>
+
+    <div *ngIf="!cargando">
+      <!-- Tarjetas de Resumen -->
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-6">
+          <div class="card border-0 p-3 shadow-sm rounded-3 text-light" style="background: #18181b;">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <span class="text-secondary small fw-bold d-block text-uppercase">Ventas Registradas Hoy</span>
+                <h3 class="fw-bold text-warning mb-0 mt-1">{{ resumen.ventas_hoy_count || 0 }}</h3>
+              </div>
+              <i class="bi bi-bag-check fs-1 text-warning opacity-75"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="card border-0 p-3 shadow-sm rounded-3 text-light" style="background: #18181b;">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <span class="text-secondary small fw-bold d-block text-uppercase">Ventas Acumuladas del Mes</span>
+                <h3 class="fw-bold text-warning mb-0 mt-1">{{ resumen.ventas_mes_count || 0 }}</h3>
+              </div>
+              <i class="bi bi-calendar-check fs-1 text-warning opacity-75"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de Productos Más Vendidos -->
+      <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="fw-bold text-dark mb-0">Productos Más Vendidos</h5>
+          <span class="badge bg-dark text-warning">TOP 5</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Posición</th>
+                <th scope="col">Producto</th>
+                <th scope="col" class="text-center">Unidades Vendidas</th>
+                <th scope="col" class="text-end">Ingresos Generados</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of topProductos; let i = index">
+                <td><span class="badge bg-warning text-dark fw-bold">#{{ i + 1 }}</span></td>
+                <td class="fw-bold text-dark">{{ item.product__name }}</td>
+                <td class="text-center">{{ item.total_vendido }} unidades</td>
+                <td class="text-end fw-bold text-success">${{ item.ingresos_totales | number:'1.0-0' }} COP</td>
+              </tr>
+              <tr *ngIf="topProductos.length === 0">
+                <td colspan="4" class="text-center py-4 text-muted">No se registran ventas para calcular productos destacados.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

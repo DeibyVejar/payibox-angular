@@ -14,6 +14,7 @@ import { adminGuard } from './guards/admin.guard';
 import { PlanesComponent } from './planes/planes.component';
 import { ForgotPasswordComponent } from './Logincomponents/forgot-password.component';
 import { ResetPasswordComponent } from './Logincomponents/reset-password.component';
+import { DashboardComponent } from './DashboardComponent/dashboard.component';
 
 export const routes: Routes = [
   { path: 'perfil', component: PerfilComponent },
@@ -34,6 +35,7 @@ export const routes: Routes = [
   { path: 'adminuploadcomponent', component: AdminUploadComponent, canActivate: [adminGuard] },
   { path: 'stock', component: StockComponent, canActivate: [adminGuard] }, 
   { path: 'usuarios', component: UsersComponent, canActivate: [adminGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] },
 
   { path: '**', redirectTo: '' }
 ];
