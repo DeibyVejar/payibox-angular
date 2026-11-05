@@ -66,11 +66,22 @@ export class StoreComponent implements OnInit, OnDestroy {
   }
 
   crearCategoria(): void {
-    if (!this.nuevaCategoriaNombre.trim()) return;
+    const nombreLimpio = this.nuevaCategoriaNombre.trim();
 
-    const nuevaCat = this.nuevaCategoriaNombre.trim();
+    if (!nombreLimpio) return;
 
-    // 1. Obtención robusta del Token (Busca en 'access', 'token' o dentro de 'user')
+    // Validar que el nombre contenga texto y no sean solo números
+    const contieneLetras = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(nombreLimpio);
+    const esSoloNumeros = /^\d+$/.test(nombreLimpio);
+
+    if (esSoloNumeros || !contieneLetras) {
+      alert('El nombre de la categoría debe contener letras y no puede estar compuesto solo por números.');
+      return;
+    }
+
+    const nuevaCat = nombreLimpio;
+
+    // Obtención del token
     let token = localStorage.getItem('access') || localStorage.getItem('token');
     if (!token) {
       const userData = localStorage.getItem('user');
@@ -84,13 +95,11 @@ export class StoreComponent implements OnInit, OnDestroy {
       }
     }
 
-    // 2. Construcción de encabezados con autorización Bearer
     let headers = new HttpHeaders();
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
 
-    // 3. Petición POST a la API
     this.http.post('https://payiboxgym.pythonanywhere.com/api/products/categories/', {
       name: nuevaCat
     }, { headers }).subscribe({
@@ -101,12 +110,62 @@ export class StoreComponent implements OnInit, OnDestroy {
         }
         this.nuevaCategoriaNombre = '';
 
-        // Cerrar modal automáticamente
         const btnCerrar = document.getElementById('cerrarModalCat');
         if (btnCerrar) btnCerrar.click();
       },
       error: (err) => {
         console.error('Error al crear la categoría:', err);
+        alert('No se pudo guardar la categoría. Revisa tus permisos de usuario.');
+      }
+    });
+  }
+
+  eliminarCategoria(catNombre: string, event: Event): void {
+    event.stopPropagation();
+
+    if (catNombre === 'todos') return;
+
+    if (!confirm(`¿Estás seguro de que deseas eliminar la categoría "${catNombre}"?`)) {
+      return;
+    }
+
+    this.http.get<any[]>('https://payiboxgym.pythonanywhere.com/api/products/categories/').subscribe({
+      next: (categories) => {
+        const catObj = categories.find(c => c.name.toLowerCase() === catNombre.toLowerCase());
+        
+        if (!catObj) {
+          this.categorias = this.categorias.filter(c => c !== catNombre);
+          return;
+        }
+
+        let token = localStorage.getItem('access') || localStorage.getItem('token');
+        if (!token) {
+          const userData = localStorage.getItem('user');
+          if (userData) {
+            try {
+              const parsedUser = JSON.parse(userData);
+              token = parsedUser.token || parsedUser.access;
+            } catch (e) {}
+          }
+        }
+
+        let headers = new HttpHeaders();
+        if (token) {
+          headers = headers.set('Authorization', `Bearer ${token}`);
+        }
+
+        this.http.delete(`https://payiboxgym.pythonanywhere.com/api/products/categories/${catObj.id}/`, { headers }).subscribe({
+          next: () => {
+            this.categorias = this.categorias.filter(c => c !== catNombre);
+            if (this.categoriaSeleccionada === catNombre) {
+              this.categoriaSeleccionada = 'todos';
+            }
+          },
+          error: (err) => {
+            console.error('Error al eliminar la categoría:', err);
+            alert('No se pudo eliminar la categoría.');
+          }
+        });
       }
     });
   }
@@ -119,7 +178,6 @@ export class StoreComponent implements OnInit, OnDestroy {
     this.categoriaSeleccionada = cat;
   }
 
-  // Getter que filtra los productos dinámicamente por la categoría seleccionada
   get productosFiltrados(): Product[] {
     if (this.categoriaSeleccionada === 'todos') {
       return this.products;

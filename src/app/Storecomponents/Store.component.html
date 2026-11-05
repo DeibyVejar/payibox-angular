@@ -7,13 +7,24 @@
 
     <!-- BARRA DE FILTROS POR CATEGORÍA -->
     <div class="category-filters d-flex flex-wrap justify-content-center gap-2 mb-4 align-items-center">
-      <button 
-        *ngFor="let cat of categorias" 
-        (click)="seleccionarCategoria(cat)" 
-        class="btn btn-sm text-capitalize px-3 py-2 rounded-pill fw-bold transition-all"
-        [ngClass]="categoriaSeleccionada === cat ? 'btn-warning text-dark shadow-sm' : 'btn-outline-secondary text-light'">
-        {{ cat === 'todos' ? 'Todos los artículos' : cat }}
-      </button>
+      <div *ngFor="let cat of categorias" class="position-relative d-inline-block">
+        <button 
+          (click)="seleccionarCategoria(cat)" 
+          class="btn btn-sm text-capitalize px-3 py-2 rounded-pill fw-bold transition-all d-flex align-items-center gap-2"
+          [ngClass]="categoriaSeleccionada === cat ? 'btn-warning text-dark shadow-sm' : 'btn-outline-secondary text-light'">
+          {{ cat === 'todos' ? 'Todos los artículos' : cat }}
+          
+          <!-- Icono de eliminación (Solo Admin y no aplicable a 'todos') -->
+          <span 
+            *ngIf="isAdmin && cat !== 'todos'" 
+            (click)="eliminarCategoria(cat, $event)"
+            class="badge bg-danger rounded-circle p-1 ms-1 d-inline-flex align-items-center justify-content-center"
+            style="width: 18px; height: 18px; font-size: 10px; cursor: pointer;"
+            title="Eliminar categoría">
+            ✕
+          </span>
+        </button>
+      </div>
 
       <!-- BOTÓN MÁS (+) SOLO PARA ADMINISTRADORES -->
       <button 
@@ -50,7 +61,6 @@
           <div class="product-footer">
             <span class="product-price">${{ item.price | number:'1.2-2' }}</span>
             
-            <!-- Botón bloqueado físicamente si el producto no tiene existencias -->
             <button class="add-to-cart-btn" [disabled]="item.stock === 0" (click)="addToCart(item)">
               <span class="icon" *ngIf="item.stock > 0">+</span>
               {{ item.stock > 0 ? 'Añadir' : 'Sin stock' }}
