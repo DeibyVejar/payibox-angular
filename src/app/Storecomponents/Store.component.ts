@@ -70,12 +70,11 @@ export class StoreComponent implements OnInit, OnDestroy {
 
     if (!nombreLimpio) return;
 
-    // Validar que el nombre contenga texto y no sean solo números
-    const contieneLetras = /[a-zA-ZáéíóúÁÉÍÓÚñÑ]/.test(nombreLimpio);
-    const esSoloNumeros = /^\d+$/.test(nombreLimpio);
+    // RegEx estricta: solo permite letras (con tildes y eñes) y espacios. Prohíbe cualquier número o símbolo.
+    const soloLetrasYEspacios = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
 
-    if (esSoloNumeros || !contieneLetras) {
-      alert('El nombre de la categoría debe contener letras y no puede estar compuesto solo por números.');
+    if (!soloLetrasYEspacios.test(nombreLimpio)) {
+      alert('El nombre de la categoría solo puede contener letras y espacios, sin números ni caracteres especiales.');
       return;
     }
 
