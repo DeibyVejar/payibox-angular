@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { CartService, Product } from '../services/car.services';
 import { ProductService } from '../services/product.service';
@@ -47,7 +47,7 @@ export class StoreComponent implements OnInit, OnDestroy {
   }
 
   loadCategories(): void {
-    this.http.get<any[]>('https://payiboxgym.pythonanywhere.com/api/categories/').subscribe({
+    this.http.get<any[]>('https://payiboxgym.pythonanywhere.com/api/products/categories/').subscribe({
       next: (data) => {
         const nombresApi = data.map(c => c.name.toLowerCase());
         this.categorias = ['todos', ...Array.from(new Set(nombresApi))];
@@ -66,29 +66,35 @@ export class StoreComponent implements OnInit, OnDestroy {
   }
 
   crearCategoria(): void {
-    if (!this.nuevaCategoriaNombre.trim()) return;
+  if (!this.nuevaCategoriaNombre.trim()) return;
 
-    const nuevaCat = this.nuevaCategoriaNombre.trim();
+  const nuevaCat = this.nuevaCategoriaNombre.trim();
+  const token = localStorage.getItem('token');
 
-    this.http.post('https://payiboxgym.pythonanywhere.com/api/categories/', {
-      name: nuevaCat
-    }).subscribe({
-      next: (res: any) => {
-        const catNombre = (res.name || nuevaCat).toLowerCase();
-        if (!this.categorias.includes(catNombre)) {
-          this.categorias.push(catNombre);
-        }
-        this.nuevaCategoriaNombre = '';
-
-        // Cerrar modal automáticamente
-        const btnCerrar = document.getElementById('cerrarModalCat');
-        if (btnCerrar) btnCerrar.click();
-      },
-      error: (err) => {
-        console.error('Error al crear la categoría:', err);
-      }
-    });
+  let headers = new HttpHeaders();
+  if (token) {
+    headers = headers.set('Authorization', `Bearer ${token}`);
   }
+
+  this.http.post('https://payiboxgym.pythonanywhere.com/api/products/categories/', {
+    name: nuevaCat
+  }, { headers }).subscribe({
+    next: (res: any) => {
+      const catNombre = (res.name || nuevaCat).toLowerCase();
+      if (!this.categorias.includes(catNombre)) {
+        this.categorias.push(catNombre);
+      }
+      this.nuevaCategoriaNombre = '';
+
+      // Cerrar modal automáticamente
+      const btnCerrar = document.getElementById('cerrarModalCat');
+      if (btnCerrar) btnCerrar.click();
+    },
+    error: (err) => {
+      console.error('Error al crear la categoría:', err);
+    }
+  });
+}
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
