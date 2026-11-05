@@ -66,35 +66,50 @@ export class StoreComponent implements OnInit, OnDestroy {
   }
 
   crearCategoria(): void {
-  if (!this.nuevaCategoriaNombre.trim()) return;
+    if (!this.nuevaCategoriaNombre.trim()) return;
 
-  const nuevaCat = this.nuevaCategoriaNombre.trim();
-  const token = localStorage.getItem('token');
+    const nuevaCat = this.nuevaCategoriaNombre.trim();
 
-  let headers = new HttpHeaders();
-  if (token) {
-    headers = headers.set('Authorization', `Bearer ${token}`);
-  }
-
-  this.http.post('https://payiboxgym.pythonanywhere.com/api/products/categories/', {
-    name: nuevaCat
-  }, { headers }).subscribe({
-    next: (res: any) => {
-      const catNombre = (res.name || nuevaCat).toLowerCase();
-      if (!this.categorias.includes(catNombre)) {
-        this.categorias.push(catNombre);
+    // 1. Obtención robusta del Token (Busca en 'access', 'token' o dentro de 'user')
+    let token = localStorage.getItem('access') || localStorage.getItem('token');
+    if (!token) {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        try {
+          const parsedUser = JSON.parse(userData);
+          token = parsedUser.token || parsedUser.access;
+        } catch (e) {
+          console.error('Error al obtener token del objeto user:', e);
+        }
       }
-      this.nuevaCategoriaNombre = '';
-
-      // Cerrar modal automáticamente
-      const btnCerrar = document.getElementById('cerrarModalCat');
-      if (btnCerrar) btnCerrar.click();
-    },
-    error: (err) => {
-      console.error('Error al crear la categoría:', err);
     }
-  });
-}
+
+    // 2. Construcción de encabezados con autorización Bearer
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    // 3. Petición POST a la API
+    this.http.post('https://payiboxgym.pythonanywhere.com/api/products/categories/', {
+      name: nuevaCat
+    }, { headers }).subscribe({
+      next: (res: any) => {
+        const catNombre = (res.name || nuevaCat).toLowerCase();
+        if (!this.categorias.includes(catNombre)) {
+          this.categorias.push(catNombre);
+        }
+        this.nuevaCategoriaNombre = '';
+
+        // Cerrar modal automáticamente
+        const btnCerrar = document.getElementById('cerrarModalCat');
+        if (btnCerrar) btnCerrar.click();
+      },
+      error: (err) => {
+        console.error('Error al crear la categoría:', err);
+      }
+    });
+  }
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
