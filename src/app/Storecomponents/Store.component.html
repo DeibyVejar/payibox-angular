@@ -6,13 +6,23 @@
     </header>
 
     <!-- BARRA DE FILTROS POR CATEGORÍA -->
-    <div class="category-filters d-flex flex-wrap justify-content-center gap-2 mb-4">
+    <div class="category-filters d-flex flex-wrap justify-content-center gap-2 mb-4 align-items-center">
       <button 
         *ngFor="let cat of categorias" 
         (click)="seleccionarCategoria(cat)" 
         class="btn btn-sm text-capitalize px-3 py-2 rounded-pill fw-bold transition-all"
         [ngClass]="categoriaSeleccionada === cat ? 'btn-warning text-dark shadow-sm' : 'btn-outline-secondary text-light'">
         {{ cat === 'todos' ? 'Todos los artículos' : cat }}
+      </button>
+
+      <!-- BOTÓN MÁS (+) SOLO PARA ADMINISTRADORES -->
+      <button 
+        *ngIf="isAdmin"
+        class="btn btn-sm btn-warning text-dark rounded-pill px-3 py-2 fw-bold d-flex align-items-center gap-1 shadow-sm transition-all"
+        data-bs-toggle="modal" 
+        data-bs-target="#nuevaCategoriaModal"
+        title="Agregar Nueva Categoría">
+        <i class="bi bi-plus-lg"></i> + Categoría
       </button>
     </div>
 
@@ -60,3 +70,27 @@
 
   </div>
 </section>
+
+<!-- MODAL PARA CREAR CATEGORÍA -->
+<div class="modal fade" id="nuevaCategoriaModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-dark text-warning">
+        <h5 class="modal-title fw-bold">Nueva Categoría</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" id="cerrarModalCat"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label fw-bold text-dark">Nombre de la categoría</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="nuevaCategoriaNombre" 
+          placeholder="Ej. Proteínas, Guantes, Zapatillas...">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning fw-bold btn-sm text-dark" (click)="crearCategoria()">Guardar Categoría</button>
+      </div>
+    </div>
+  </div>
+</div>
