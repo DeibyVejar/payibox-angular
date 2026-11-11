@@ -18,38 +18,56 @@
            style="border: 1px solid #e2e8f0 !important;"
            *ngFor="let pedido of pedidosLocales">
 
-        <!-- CABECERA DE TARJETA -->
-        <div class="px-4 py-3 bg-light border-bottom border-light-subtle d-flex justify-content-between align-items-center"
+        <!-- CABECERA DE TARJETA MEJORADA -->
+        <div class="px-4 py-3 bg-light border-bottom border-light-subtle"
              style="background-color: #f8fafc !important; border-bottom-color: #e2e8f0 !important;">
-          <div class="d-flex align-items-center gap-3">
-            <span class="fw-bold text-dark" style="font-family: monospace; font-size: 0.9rem; color: #334155 !important;">ID: PBX-000{{ pedido.id }}</span>
-            <span class="text-muted small" style="color: #cbd5e1 !important;">•</span>
-            <span class="text-muted small fw-medium" style="color: #64748b !important;">{{ pedido.created_at | date:'dd/MM/yyyy' }}</span>
-          </div>
-
-          <div class="d-flex align-items-center gap-2">
-            <!-- Solo visible si es Administrador -->
-            <div *ngIf="isAdmin" class="text-end me-2 small">
-              <span class="text-dark fw-bold d-block" style="font-size: 0.8rem;">{{ pedido.user?.username }}</span>
+          
+          <div class="d-flex justify-content-between align-items-start">
+            
+            <!-- Info del Cliente (Izquierda) -->
+            <div class="cliente-info overflow-hidden pe-3">
+              <!-- Nombre del cliente (Solo visible si es Administrador) -->
+              <h5 *ngIf="isAdmin" class="mb-0 fw-bold text-dark text-truncate" style="font-size: 1.1rem; color: #1e293b !important;">
+                {{ pedido.user?.username }}
+              </h5>
+              
+              <!-- Correo del cliente (Solo visible si es Administrador) -->
+              <div *ngIf="isAdmin" class="text-muted small mt-1 email-text d-flex align-items-center" style="color: #64748b !important;">
+                 <i class="bi bi-envelope-fill me-2" style="font-size: 0.8rem;"></i> {{ pedido.user?.email || 'correo@no-disponible.com' }}
+              </div>
+              
+              <!-- ID y Fecha de la Orden -->
+              <div class="text-muted mt-2" style="font-size: 0.85rem; color: #64748b !important;">
+                <span class="fw-bold text-dark" style="font-family: monospace; color: #334155 !important;">ID: PBX-000{{ pedido.id }}</span>
+                <span class="mx-2" style="color: #cbd5e1 !important;">•</span>
+                <span class="fw-medium">{{ pedido.created_at | date:'dd/MM/yyyy' }}</span>
+              </div>
             </div>
 
-            <select *ngIf="isAdmin" class="form-select form-select-sm" (change)="cambiarEstado(pedido, $event)"
-              [style.color]="pedido.status === 'confirmed' ? '#166534' : (pedido.status === 'rejected' ? '#991b1b' : '#854d0e')"
-              style="border-radius: 6px; font-weight: 600; font-size: 0.8rem; border-color: #cbd5e1;">
-              <option value="pending" [selected]="pedido.status === 'pending'">Pendiente</option>
-              <option value="confirmed" [selected]="pedido.status === 'confirmed'">Confirmado</option>
-              <option value="rejected" [selected]="pedido.status === 'rejected'">Rechazado</option>
-            </select>
+            <!-- Estado de la Orden (Derecha) -->
+            <div class="estado-selector text-end" style="min-width: 130px;">
+              <!-- Dropdown para Admin -->
+              <select *ngIf="isAdmin" class="form-select form-select-sm shadow-sm" (change)="cambiarEstado(pedido, $event)"
+                [style.color]="pedido.status === 'confirmed' ? '#166534' : (pedido.status === 'rejected' ? '#991b1b' : '#854d0e')"
+                [style.backgroundColor]="pedido.status === 'confirmed' ? '#f0fdf4' : (pedido.status === 'rejected' ? '#fef2f2' : '#fefce8')"
+                style="border-radius: 6px; font-weight: 600; font-size: 0.85rem; border-color: #cbd5e1; cursor: pointer;">
+                <option value="pending" [selected]="pedido.status === 'pending'">Pendiente</option>
+                <option value="confirmed" [selected]="pedido.status === 'confirmed'">Confirmado</option>
+                <option value="rejected" [selected]="pedido.status === 'rejected'">Rechazado</option>
+              </select>
 
-            <span *ngIf="!isAdmin" class="badge text-uppercase fw-bold p-2 rounded-2" 
-                  style="letter-spacing: 0.5px; font-size: 0.7rem; padding: 4px 10px !important;"
-                  [ngClass]="{
-                  'bg-warning-subtle text-warning': ['pendiente', 'pending'].includes(pedido.status?.toLowerCase()),
-                  'bg-success-subtle text-success': ['confirmado', 'confirmed'].includes(pedido.status?.toLowerCase()),
-                  'bg-danger-subtle text-danger': ['rechazado', 'rejected'].includes(pedido.status?.toLowerCase())
-                }">
-              {{ traducirEstado(pedido.status) }}
-            </span>
+              <!-- Badge para Usuario (No Admin) -->
+              <span *ngIf="!isAdmin" class="badge text-uppercase fw-bold p-2 rounded-2" 
+                    style="letter-spacing: 0.5px; font-size: 0.75rem; padding: 6px 12px !important;"
+                    [ngClass]="{
+                    'bg-warning-subtle text-warning': ['pendiente', 'pending'].includes(pedido.status?.toLowerCase()),
+                    'bg-success-subtle text-success': ['confirmado', 'confirmed'].includes(pedido.status?.toLowerCase()),
+                    'bg-danger-subtle text-danger': ['rechazado', 'rejected'].includes(pedido.status?.toLowerCase())
+                  }">
+                {{ traducirEstado(pedido.status) }}
+              </span>
+            </div>
+
           </div>
         </div>
 
@@ -105,6 +123,7 @@
       </div>
     </div>
 
+    <!-- ESTADO VACÍO (SIN PEDIDOS) -->
     <ng-template #noOrders>
       <div class="card border border-light-subtle rounded-4 p-5 text-center bg-light shadow-sm" style="border: 1px solid #e2e8f0 !important; background-color: #f8fafc !important; max-width: 850px; margin: 0 auto;">
         <h6 class="fw-bold text-dark mb-1" style="color: #334155 !important;">No tienes pedidos registrados.</h6>
