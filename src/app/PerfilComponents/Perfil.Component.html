@@ -12,115 +12,155 @@
   <!-- 2. Contenido Principal (Solo visible cuando finaliza la carga) -->
   <ng-container *ngIf="!cargandoPedidos">
 
-    <div class="d-grid gap-3" *ngIf="pedidosLocales && pedidosLocales.length > 0; else noOrders" style="max-width: 850px; margin: 0 auto;">
-      <div class="card border border-light-subtle shadow-sm rounded-4 overflow-hidden bg-white"
-           [style.border-left]="['confirmado', 'confirmed'].includes(pedido.status?.toLowerCase()) ? '6px solid #198754 !important' : (['rechazado', 'rejected'].includes(pedido.status?.toLowerCase()) ? '6px solid #dc3545 !important' : '6px solid #ffc107 !important')"
-           style="border: 1px solid #e2e8f0 !important;"
-           *ngFor="let pedido of pedidosLocales">
+    <div *ngIf="pedidosLocales && pedidosLocales.length > 0; else noOrders" style="max-width: 850px; margin: 0 auto;">
+      
+      <!-- CONTENEDOR DE TARJETAS -->
+      <div class="d-grid gap-3">
+        <!-- 
+          ¡IMPORTANTE! Aquí iteramos sobre pedidosPaginados en lugar de pedidosLocales 
+        -->
+        <div class="card border border-light-subtle shadow-sm rounded-4 overflow-hidden bg-white"
+             [style.border-left]="['confirmado', 'confirmed'].includes(pedido.status?.toLowerCase()) ? '6px solid #198754 !important' : (['rechazado', 'rejected'].includes(pedido.status?.toLowerCase()) ? '6px solid #dc3545 !important' : '6px solid #ffc107 !important')"
+             style="border: 1px solid #e2e8f0 !important;"
+             *ngFor="let pedido of pedidosPaginados">
 
-        <!-- CABECERA DE TARJETA MEJORADA -->
-        <div class="px-4 py-3 bg-light border-bottom border-light-subtle"
-             style="background-color: #f8fafc !important; border-bottom-color: #e2e8f0 !important;">
-          
-          <div class="d-flex justify-content-between align-items-start">
+          <!-- CABECERA DE TARJETA MEJORADA -->
+          <div class="px-4 py-3 bg-light border-bottom border-light-subtle"
+               style="background-color: #f8fafc !important; border-bottom-color: #e2e8f0 !important;">
             
-            <!-- Info del Cliente (Izquierda) -->
-            <div class="cliente-info overflow-hidden pe-3">
-              <!-- Nombre del cliente (Solo visible si es Administrador) -->
-              <h5 *ngIf="isAdmin" class="mb-0 fw-bold text-dark text-truncate" style="font-size: 1.1rem; color: #1e293b !important;">
-                {{ pedido.user?.username }}
-              </h5>
+            <div class="d-flex justify-content-between align-items-start">
               
-              <!-- Correo del cliente (Solo visible si es Administrador) -->
-              <div *ngIf="isAdmin" class="text-muted small mt-1 email-text d-flex align-items-center" style="color: #64748b !important;">
-                 <i class="bi bi-envelope-fill me-2" style="font-size: 0.8rem;"></i> {{ pedido.user?.email || 'correo@no-disponible.com' }}
+              <!-- Info del Cliente (Izquierda) -->
+              <div class="cliente-info overflow-hidden pe-3">
+                <!-- Nombre del cliente (Solo visible si es Administrador) -->
+                <h5 *ngIf="isAdmin" class="mb-0 fw-bold text-dark text-truncate" style="font-size: 1.1rem; color: #1e293b !important;">
+                  {{ pedido.user?.username }}
+                </h5>
+                
+                <!-- Correo del cliente (Solo visible si es Administrador) -->
+                <div *ngIf="isAdmin" class="text-muted small mt-1 email-text d-flex align-items-center" style="color: #64748b !important;">
+                   <i class="bi bi-envelope-fill me-2" style="font-size: 0.8rem;"></i> {{ pedido.user?.email || 'correo@no-disponible.com' }}
+                </div>
+                
+                <!-- ID y Fecha de la Orden -->
+                <div class="text-muted mt-2" style="font-size: 0.85rem; color: #64748b !important;">
+                  <span class="fw-bold text-dark" style="font-family: monospace; color: #334155 !important;">ID: PBX-000{{ pedido.id }}</span>
+                  <span class="mx-2" style="color: #cbd5e1 !important;">•</span>
+                  <span class="fw-medium">{{ pedido.created_at | date:'dd/MM/yyyy' }}</span>
+                </div>
               </div>
+
+              <!-- Estado de la Orden (Derecha) -->
+              <div class="estado-selector text-end" style="min-width: 130px;">
+                <!-- Dropdown para Admin -->
+                <select *ngIf="isAdmin" class="form-select form-select-sm shadow-sm" (change)="cambiarEstado(pedido, $event)"
+                  [style.color]="pedido.status === 'confirmed' ? '#166534' : (pedido.status === 'rejected' ? '#991b1b' : '#854d0e')"
+                  [style.backgroundColor]="pedido.status === 'confirmed' ? '#f0fdf4' : (pedido.status === 'rejected' ? '#fef2f2' : '#fefce8')"
+                  style="border-radius: 6px; font-weight: 600; font-size: 0.85rem; border-color: #cbd5e1; cursor: pointer;">
+                  <option value="pending" [selected]="pedido.status === 'pending'">Pendiente</option>
+                  <option value="confirmed" [selected]="pedido.status === 'confirmed'">Confirmado</option>
+                  <option value="rejected" [selected]="pedido.status === 'rejected'">Rechazado</option>
+                </select>
+
+                <!-- Badge para Usuario (No Admin) -->
+                <span *ngIf="!isAdmin" class="badge text-uppercase fw-bold p-2 rounded-2" 
+                      style="letter-spacing: 0.5px; font-size: 0.75rem; padding: 6px 12px !important;"
+                      [ngClass]="{
+                      'bg-warning-subtle text-warning': ['pendiente', 'pending'].includes(pedido.status?.toLowerCase()),
+                      'bg-success-subtle text-success': ['confirmado', 'confirmed'].includes(pedido.status?.toLowerCase()),
+                      'bg-danger-subtle text-danger': ['rechazado', 'rejected'].includes(pedido.status?.toLowerCase())
+                    }">
+                  {{ traducirEstado(pedido.status) }}
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- CUERPO DE TARJETA -->
+          <div class="px-4 py-3">
+            <div class="d-flex align-items-center justify-content-between">
               
-              <!-- ID y Fecha de la Orden -->
-              <div class="text-muted mt-2" style="font-size: 0.85rem; color: #64748b !important;">
-                <span class="fw-bold text-dark" style="font-family: monospace; color: #334155 !important;">ID: PBX-000{{ pedido.id }}</span>
-                <span class="mx-2" style="color: #cbd5e1 !important;">•</span>
-                <span class="fw-medium">{{ pedido.created_at | date:'dd/MM/yyyy' }}</span>
+              <!-- Método de Pago -->
+              <div class="d-flex align-items-center">
+                <div class="bg-light p-2 rounded-3 me-3 d-flex align-items-center justify-content-center"
+                     style="width: 50px; height: 50px; background-color: #f1f5f9 !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important;">
+                  <img *ngIf="pedido.transfer_image" [src]="pedido.transfer_image"
+                    class="img-fluid w-100 h-100 object-fit-cover" alt="Recibo" style="border-radius: 8px;">
+                  <i *ngIf="!pedido.transfer_image" class="bi"
+                    [ngClass]="traducirMetodoPago(pedido.payment_method) === 'Efectivo' ? 'bi-cash-stack' : 'bi-bank'"
+                    style="font-size: 1.4rem; color: #475569;"></i>
+                </div>
+
+                <div>
+                  <span class="d-block text-muted font-xs text-uppercase fw-semibold" style="font-size: 0.68rem; letter-spacing: 0.5px; color: #94a3b8 !important;">Método de Pago</span>
+                  <span class="fw-bold text-dark" style="font-size: 0.95rem; color: #1e293b !important;">{{ traducirMetodoPago(pedido.payment_method) }}</span>
+                </div>
               </div>
+
+              <!-- Total Protagonista -->
+              <div class="text-end">
+                <span class="d-block text-muted font-xs text-uppercase fw-semibold" style="font-size: 0.68rem; letter-spacing: 0.5px; color: #94a3b8 !important;">Monto Total</span>
+                <span class="h4 fw-bold text-dark mb-0" style="color: #0f172a !important; font-size: 1.35rem;">${{ (pedido.total | number:'1.2-2') }}</span>
+              </div>
+
             </div>
 
-            <!-- Estado de la Orden (Derecha) -->
-            <div class="estado-selector text-end" style="min-width: 130px;">
-              <!-- Dropdown para Admin -->
-              <select *ngIf="isAdmin" class="form-select form-select-sm shadow-sm" (change)="cambiarEstado(pedido, $event)"
-                [style.color]="pedido.status === 'confirmed' ? '#166534' : (pedido.status === 'rejected' ? '#991b1b' : '#854d0e')"
-                [style.backgroundColor]="pedido.status === 'confirmed' ? '#f0fdf4' : (pedido.status === 'rejected' ? '#fef2f2' : '#fefce8')"
-                style="border-radius: 6px; font-weight: 600; font-size: 0.85rem; border-color: #cbd5e1; cursor: pointer;">
-                <option value="pending" [selected]="pedido.status === 'pending'">Pendiente</option>
-                <option value="confirmed" [selected]="pedido.status === 'confirmed'">Confirmado</option>
-                <option value="rejected" [selected]="pedido.status === 'rejected'">Rechazado</option>
-              </select>
+            <!-- PIE DE TARJETA -->
+            <div class="mt-3 pt-2 border-top border-light-subtle d-flex justify-content-between align-items-center"
+                 style="border-top-color: #f1f5f9 !important;">
+              <div class="d-flex gap-2 align-items-center">
+                <button class="btn btn-warning fw-bold px-3 py-1 rounded-2 shadow-sm btn-sm" (click)="verFactura(pedido)"
+                        style="font-size: 0.8rem; box-shadow: none !important;">
+                  <i class="bi bi-file-earmark-text"></i> Factura
+                </button>
 
-              <!-- Badge para Usuario (No Admin) -->
-              <span *ngIf="!isAdmin" class="badge text-uppercase fw-bold p-2 rounded-2" 
-                    style="letter-spacing: 0.5px; font-size: 0.75rem; padding: 6px 12px !important;"
-                    [ngClass]="{
-                    'bg-warning-subtle text-warning': ['pendiente', 'pending'].includes(pedido.status?.toLowerCase()),
-                    'bg-success-subtle text-success': ['confirmado', 'confirmed'].includes(pedido.status?.toLowerCase()),
-                    'bg-danger-subtle text-danger': ['rechazado', 'rejected'].includes(pedido.status?.toLowerCase())
-                  }">
-                {{ traducirEstado(pedido.status) }}
-              </span>
+                <button *ngIf="isAdmin && pedido.transfer_image" class="btn btn-outline-primary btn-sm py-1" (click)="verComprobante(pedido)" style="font-size: 0.8rem;">
+                  Ver Pago
+                </button>
+
+                <span *ngIf="isAdmin && !pedido.transfer_image" class="text-danger small ms-1" style="font-size: 0.75rem;">Sin imagen</span>
+              </div>
+
+              <small class="text-muted font-xs" style="font-family: monospace; color: #94a3b8 !important; font-size: 0.75rem;">Ref: {{ pedido.transfer_reference || 'N/A' }}</small>
             </div>
-
           </div>
+
         </div>
-
-        <!-- CUERPO DE TARJETA -->
-        <div class="px-4 py-3">
-          <div class="d-flex align-items-center justify-content-between">
-            
-            <!-- Método de Pago -->
-            <div class="d-flex align-items-center">
-              <div class="bg-light p-2 rounded-3 me-3 d-flex align-items-center justify-content-center"
-                   style="width: 50px; height: 50px; background-color: #f1f5f9 !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important;">
-                <img *ngIf="pedido.transfer_image" [src]="pedido.transfer_image"
-                  class="img-fluid w-100 h-100 object-fit-cover" alt="Recibo" style="border-radius: 8px;">
-                <i *ngIf="!pedido.transfer_image" class="bi"
-                  [ngClass]="traducirMetodoPago(pedido.payment_method) === 'Efectivo' ? 'bi-cash-stack' : 'bi-bank'"
-                  style="font-size: 1.4rem; color: #475569;"></i>
-              </div>
-
-              <div>
-                <span class="d-block text-muted font-xs text-uppercase fw-semibold" style="font-size: 0.68rem; letter-spacing: 0.5px; color: #94a3b8 !important;">Método de Pago</span>
-                <span class="fw-bold text-dark" style="font-size: 0.95rem; color: #1e293b !important;">{{ traducirMetodoPago(pedido.payment_method) }}</span>
-              </div>
-            </div>
-
-            <!-- Total Protagonista -->
-            <div class="text-end">
-              <span class="d-block text-muted font-xs text-uppercase fw-semibold" style="font-size: 0.68rem; letter-spacing: 0.5px; color: #94a3b8 !important;">Monto Total</span>
-              <span class="h4 fw-bold text-dark mb-0" style="color: #0f172a !important; font-size: 1.35rem;">${{ (pedido.total | number:'1.2-2') }}</span>
-            </div>
-
-          </div>
-
-          <!-- PIE DE TARJETA -->
-          <div class="mt-3 pt-2 border-top border-light-subtle d-flex justify-content-between align-items-center"
-               style="border-top-color: #f1f5f9 !important;">
-            <div class="d-flex gap-2 align-items-center">
-              <button class="btn btn-warning fw-bold px-3 py-1 rounded-2 shadow-sm btn-sm" (click)="verFactura(pedido)"
-                      style="font-size: 0.8rem; box-shadow: none !important;">
-                <i class="bi bi-file-earmark-text"></i> Factura
-              </button>
-
-              <button *ngIf="isAdmin && pedido.transfer_image" class="btn btn-outline-primary btn-sm py-1" (click)="verComprobante(pedido)" style="font-size: 0.8rem;">
-                Ver Pago
-              </button>
-
-              <span *ngIf="isAdmin && !pedido.transfer_image" class="text-danger small ms-1" style="font-size: 0.75rem;">Sin imagen</span>
-            </div>
-
-            <small class="text-muted font-xs" style="font-family: monospace; color: #94a3b8 !important; font-size: 0.75rem;">Ref: {{ pedido.transfer_reference || 'N/A' }}</small>
-          </div>
-        </div>
-
       </div>
+
+      <!-- CONTROLES DE PAGINACIÓN BOOTSTRAP -->
+      <div class="d-flex justify-content-center mt-4 mb-5" *ngIf="pedidosLocales.length > itemsPorPagina">
+        <nav aria-label="Navegación de pedidos">
+          <ul class="pagination pagination-sm shadow-sm">
+            
+            <!-- Botón Anterior -->
+            <li class="page-item" [class.disabled]="paginaActual === 1">
+              <button class="page-link text-dark fw-semibold" (click)="cambiarPagina(paginaActual - 1)" 
+                      style="border-color: #e2e8f0; cursor: pointer;">
+                <i class="bi bi-chevron-left"></i> Anterior
+              </button>
+            </li>
+            
+            <!-- Indicador de Página -->
+            <li class="page-item active">
+              <span class="page-link bg-warning text-dark fw-bold border-warning">
+                Página {{ paginaActual }} de {{ totalPaginas }}
+              </span>
+            </li>
+            
+            <!-- Botón Siguiente -->
+            <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+              <button class="page-link text-dark fw-semibold" (click)="cambiarPagina(paginaActual + 1)" 
+                      style="border-color: #e2e8f0; cursor: pointer;">
+                Siguiente <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+            
+          </ul>
+        </nav>
+      </div>
+
     </div>
 
     <!-- ESTADO VACÍO (SIN PEDIDOS) -->

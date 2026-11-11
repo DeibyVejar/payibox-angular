@@ -30,6 +30,13 @@ export class PerfilComponent implements OnInit {
   // Flag para controlar el estado de carga y evitar el FOUC / destello
   public cargandoPedidos: boolean = true;
 
+  // ==========================================
+  // VARIABLES DE PAGINACIÓN (NUEVO)
+  // ==========================================
+  public paginaActual: number = 1;
+  public itemsPorPagina: number = 5; // Cambia este valor para mostrar más o menos tarjetas
+  public pedidosPaginados: any[] = []; 
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.limpiarFondoOscuro();
@@ -70,14 +77,48 @@ export class PerfilComponent implements OnInit {
     this.orderService.getMyOrders().pipe(take(1)).subscribe({
       next: (data: any) => {
         this.pedidosLocales = data;
-        this.cargandoPedidos = false; // ✨ Ocultamos la carga tras recibir la respuesta
+        this.inicializarPaginacion(); // ✨ Iniciamos la paginación aquí
+        this.cargandoPedidos = false; 
       },
       error: (err: any) => {
         console.error("Error al cargar pedidos:", err);
-        this.cargandoPedidos = false; // ✨ Apagamos la carga incluso si hay error
+        this.cargandoPedidos = false; 
       }
     });
   }
+
+  // ==========================================
+  // MÉTODOS DE PAGINACIÓN (NUEVO)
+  // ==========================================
+  
+  inicializarPaginacion() {
+    this.paginaActual = 1;
+    this.actualizarVistaPaginada();
+  }
+
+  actualizarVistaPaginada() {
+    const inicio = (this.paginaActual - 1) * this.itemsPorPagina;
+    const fin = inicio + this.itemsPorPagina;
+    this.pedidosPaginados = this.pedidosLocales.slice(inicio, fin);
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    if (nuevaPagina >= 1 && nuevaPagina <= this.totalPaginas) {
+      this.paginaActual = nuevaPagina;
+      this.actualizarVistaPaginada();
+      
+      // Scroll suave hacia la parte superior del contenedor de pedidos
+      window.scrollTo({ top: 0, behavior: 'smooth' }); 
+    }
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.pedidosLocales.length / this.itemsPorPagina);
+  }
+
+  // ==========================================
+  // RESTO DE LOS MÉTODOS (SIN CAMBIOS)
+  // ==========================================
 
   verComprobante(pedido: any) {
     if (pedido.transfer_image) {
@@ -142,7 +183,14 @@ export class PerfilComponent implements OnInit {
 
     this.orderService.updateOrderStatus(pedido.id, nuevoEstado).subscribe({
       next: (response) => {
-        pedido.status = nuevoEstado;
+        // Actualizamos el estado tanto en el objeto local paginado como en el array principal
+        pedido.status = nuevoEstado; 
+        
+        // (Opcional) Sincronizar explícitamente el array principal si es necesario
+        const index = this.pedidosLocales.findIndex(p => p.id === pedido.id);
+        if (index !== -1) {
+            this.pedidosLocales[index].status = nuevoEstado;
+        }
 
         Swal.fire({
           icon: 'success',
