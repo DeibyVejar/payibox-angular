@@ -23,7 +23,7 @@ export class StockComponent implements OnInit {
   // VARIABLES DE PAGINACIÓN
   // ==========================================
   public paginaActual: number = 1;
-  public itemsPorPagina: number = 3; // Cantidad de artículos por página
+  public itemsPorPagina: number = 5; // Cantidad de artículos por página
   public inventarioPaginado: any[] = [];
 
   ngOnInit(): void {
