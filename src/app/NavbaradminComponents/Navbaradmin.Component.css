@@ -23,3 +23,16 @@
     letter-spacing: 1px;
     color: white;
 }
+
+
+/* Aplica un fondo oscuro al menú desplegable solo en móviles (pantallas menores a 992px) */
+@media (max-width: 991px) { 
+  .navbar-collapse {
+    background-color: #18181b; /* El mismo tono oscuro que usas en tu modal */
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Sombra para separarlo del contenido de atrás */
+    margin-top: 10px; /* Pequeña separación del logo */
+    z-index: 1050; /* Asegura que se mantenga por encima de todo */
+  }
+}
