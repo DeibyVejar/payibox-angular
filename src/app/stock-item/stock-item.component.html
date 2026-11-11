@@ -6,13 +6,18 @@
       <p class="text-muted small mb-0">Administra los artículos globales y niveles de existencias de Payibox GYM</p>
     </div>
 
+    <!-- Spinner de carga -->
     <div *ngIf="cargando" class="text-center my-5">
       <div class="spinner-border text-warning" role="status"></div>
     </div>
 
+    <!-- Contenido principal -->
     <div *ngIf="!cargando">
-      <div *ngFor="let item of inventario" class="stock-card bg-white rounded-3 p-4 mb-4 shadow-sm">
+      
+      <!-- Iteramos sobre inventarioPaginado -->
+      <div *ngFor="let item of inventarioPaginado" class="stock-card bg-white rounded-3 p-4 mb-4 shadow-sm">
 
+        <!-- Fila superior de la tarjeta -->
         <div class="row align-items-center mb-3 pb-3 border-bottom border-light-subtle">
           <div class="col-6 col-md-3">
             <span class="text-uppercase text-muted x-small d-block fw-semibold mb-1">Categoría</span>
@@ -27,8 +32,10 @@
           </div>
         </div>
 
+        <!-- Fila inferior de la tarjeta -->
         <div class="row align-items-center">
 
+          <!-- Imagen, Nombre y Badge de Estado -->
           <div class="col-12 col-md-5 d-flex align-items-center mb-3 mb-md-0">
             <img [src]="item.image || 'assets/cart-placeholder.png'"
               class="rounded-3 me-3 border border-light-subtle shadow-sm"
@@ -41,10 +48,12 @@
                 'status-bajo': item.stock <= 10 && item.stock > 0,
                 'status-agotado': item.stock === 0
               }">
-                {{ item.stock === 0 ? 'AGOTADO' : item.stock <= 10 ? 'BAJO STOCK' : 'DISPONIBLE' }} </span>
+                {{ item.stock === 0 ? 'AGOTADO' : item.stock <= 10 ? 'BAJO STOCK' : 'DISPONIBLE' }} 
+              </span>
             </div>
           </div>
 
+          <!-- Controles de Stock (+ y -) -->
           <div class="col-6 col-md-4 d-flex justify-content-md-center align-items-center">
             <div class="input-group justify-content-start justify-content-md-center align-items-center">
               <button (click)="ajustarStock(item, -1)" class="btn btn-stock-adjust me-2 shadow-sm"
@@ -54,6 +63,7 @@
             </div>
           </div>
 
+          <!-- Botón de Eliminar -->
           <div class="col-6 col-md-3 text-end">
             <button (click)="eliminarItem(item.id)"
               class="btn-delete-minimal text-danger bg-transparent border-0 fw-semibold p-0">
@@ -65,10 +75,39 @@
 
       </div>
 
+      <!-- CONTROLES DE PAGINACIÓN -->
+      <div class="d-flex justify-content-center mt-4 mb-5" *ngIf="inventario.length > itemsPorPagina">
+        <nav aria-label="Navegación de inventario">
+          <ul class="pagination pagination-sm shadow-sm">
+            
+            <li class="page-item" [class.disabled]="paginaActual === 1">
+              <button class="page-link text-dark fw-semibold" (click)="cambiarPagina(paginaActual - 1)" style="border-color: #e2e8f0; cursor: pointer;">
+                <i class="bi bi-chevron-left"></i> Anterior
+              </button>
+            </li>
+            
+            <li class="page-item active">
+              <span class="page-link bg-warning text-dark fw-bold border-warning">
+                Página {{ paginaActual }} de {{ totalPaginas }}
+              </span>
+            </li>
+            
+            <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+              <button class="page-link text-dark fw-semibold" (click)="cambiarPagina(paginaActual + 1)" style="border-color: #e2e8f0; cursor: pointer;">
+                Siguiente <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Estado vacío (Sin productos) -->
       <div *ngIf="inventario.length === 0"
         class="text-center py-5 bg-white rounded-3 shadow-sm border border-light-subtle">
         <p class="text-muted mb-0">No hay artículos registrados en el stock de Payibox.</p>
       </div>
+      
     </div>
 
   </div>

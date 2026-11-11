@@ -19,6 +19,13 @@ export class StockComponent implements OnInit {
   public inventario: any[] = [];
   public cargando: boolean = true;
 
+  // ==========================================
+  // VARIABLES DE PAGINACIÓN
+  // ==========================================
+  public paginaActual: number = 1;
+  public itemsPorPagina: number = 3; // Cantidad de artículos por página
+  public inventarioPaginado: any[] = [];
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.obtenerInventario();
@@ -34,6 +41,7 @@ export class StockComponent implements OnInit {
     this.productService.getProducts().pipe(take(1)).subscribe({
       next: (data) => {
         this.inventario = data;
+        this.inicializarPaginacion(); // ✨ Inicializamos la paginación al recibir datos
         this.cargando = false;
       },
       error: (err) => {
@@ -43,7 +51,37 @@ export class StockComponent implements OnInit {
     });
   }
 
-  // 🛠️ El método que nos faltaba para procesar los precios correctamente
+  // ==========================================
+  // MÉTODOS DE PAGINACIÓN
+  // ==========================================
+  inicializarPaginacion() {
+    this.paginaActual = 1;
+    this.actualizarVistaPaginada();
+  }
+
+  actualizarVistaPaginada() {
+    const inicio = (this.paginaActual - 1) * this.itemsPorPagina;
+    const fin = inicio + this.itemsPorPagina;
+    this.inventarioPaginado = this.inventario.slice(inicio, fin);
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    if (nuevaPagina >= 1 && nuevaPagina <= this.totalPaginas) {
+      this.paginaActual = nuevaPagina;
+      this.actualizarVistaPaginada();
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll suave
+    }
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.inventario.length / this.itemsPorPagina);
+  }
+
+  // ==========================================
+  // MÉTODOS EXISTENTES
+  // ==========================================
+
+  // El método que nos faltaba para procesar los precios correctamente
   getNumero(valor: any): number {
     return parseFloat(valor) || 0;
   }
@@ -78,6 +116,12 @@ export class StockComponent implements OnInit {
       this.productService.deleteProduct(id).pipe(take(1)).subscribe({
         next: () => {
           this.inventario = this.inventario.filter(item => item.id !== id);
+          
+          // ✨ Ajustamos la paginación si se elimina el último elemento de la página
+          if (this.inventarioPaginado.length === 1 && this.paginaActual > 1) {
+            this.paginaActual--;
+          }
+          this.actualizarVistaPaginada();
         },
         error: (err) => alert('Error al eliminar el producto.')
       });
