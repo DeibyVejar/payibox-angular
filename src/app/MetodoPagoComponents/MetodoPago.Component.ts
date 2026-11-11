@@ -28,8 +28,8 @@ export class MetodoPagoComponent implements OnInit {
   totalVES: number = 0;
 
   cuentas: any = {
-    'bancolombia': { numero: '123456789', titular: 'Juan Perez' },
-    'nacional': { numero: '987654321', titular: 'Empresa XYZ' }
+    'bancolombia': { numero: '82425907511', titular: 'Vivas Christopher' },
+    'nacional': { numero: '01020380560100078580', titular: 'Yiyed Perez' }
   };
 
   private http = inject(HttpClient);

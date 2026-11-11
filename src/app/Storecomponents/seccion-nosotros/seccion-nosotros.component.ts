@@ -20,9 +20,24 @@ export class SeccionNosotrosComponent {
   hitoSeleccionado: number = 0;
 
   hitos: Hito[] = [
-    { titulo: "El Origen", texto: "Payibox comenzó con un simple objetivo: eliminar las barreras entre tú y tu mejor versión. En un pequeño garaje, entendimos que el equipo adecuado no solo mejora el rendimiento, sino que forja la disciplina necesaria para alcanzar cualquier meta física.", icono: "bi-house", imagen: "images/aboutus.png" },
-    { titulo: "La Comunidad", texto: "Lo que nació como una tienda se transformó en un movimiento. Hemos sido testigos de miles de historias de superación donde el sudor, la constancia y el equipo de Payibox fueron los protagonistas.", icono: "bi-people", imagen: "images/aboutus.png" },
-    { titulo: "Payibox Hoy", texto: "Hoy integramos tecnología avanzada y diseño funcional para ofrecerte una experiencia de compra sin igual. Seguimos innovando en suplementación y accesorios, porque tu compromiso no descansa.", icono: "bi-lightning", imagen: "images/aboutus.png" }
+    { 
+      titulo: "Gimnasio del año!", 
+      texto: "Fuimos reconocidos como el mejor espacio de entrenamiento de la región gracias a nuestras instalaciones de primer nivel, un ambiente inigualable y el compromiso inquebrantable con los resultados de nuestros socios. Tu esfuerzo diario es nuestro mayor premio.", 
+      icono: "bi-trophy", 
+      imagen: "images/bestgym.jpg" 
+    },
+    { 
+      titulo: "Sala de spinning!", 
+      texto: "Contamos con una zona exclusiva y climatizada, equipada con bicicletas de última generación. Nuestras clases guiadas te harán quemar calorías, mejorar tu resistencia cardiovascular y llevar tu ritmo cardíaco al máximo con la mejor energía.", 
+      icono: "bi-bicycle", 
+      imagen: "images/spinning.jpg" 
+    },
+    { 
+      titulo: "Entrenamos atletas de alto rendimiento!", 
+      texto: "No solo somos un espacio para entrenar, somos una cuna de campeones. Diseñamos programas específicos de fuerza, potencia y acondicionamiento para deportistas exigentes que buscan romper sus propios límites y dominar en su disciplina.", 
+      icono: "bi-activity", 
+      imagen: "images/elite.jpg" 
+    }
   ];
 
   abrirDetalle(index: number) {
