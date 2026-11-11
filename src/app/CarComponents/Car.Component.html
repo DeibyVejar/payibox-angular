@@ -4,9 +4,8 @@
     <div *ngIf="cartService.totalItems() > 0; else emptyCart">
       
       <div class="container pt-5 mt-4">
-  <h2 class="mb-4 fw-bold text-dark">TU CARRITO <span class="text-warning">PAYIBOX</span></h2>
-  <!-- Resto del contenido del carrito -->
-</div>
+        <h2 class="mb-4 fw-bold text-dark">TU CARRITO <span class="text-warning">PAYIBOX</span></h2>
+      </div>
       
       <div class="row">
         
@@ -29,7 +28,14 @@
                   <div class="d-flex align-items-center border rounded-2 overflow-hidden" style="width: fit-content;">
                     <button (click)="cartService.updateQuantity(item.id, -1)" class="btn btn-sm btn-light border-0 px-3">-</button>
                     <span class="px-2 fw-bold text-dark">{{ item.quantity }}</span>
-                    <button (click)="cartService.updateQuantity(item.id, 1)" class="btn btn-sm btn-warning border-0 px-3">+</button>
+                    <!-- Botón + con bloqueo de stock -->
+                    <button 
+                      (click)="cartService.updateQuantity(item.id, 1)" 
+                      [disabled]="item.quantity >= item.stock"
+                      class="btn btn-sm border-0 px-3 transition-all"
+                      [ngClass]="item.quantity >= item.stock ? 'btn-secondary text-light opacity-50' : 'btn-warning'">
+                      +
+                    </button>
                   </div>
                 </div>
                 <!-- Total del producto y botón eliminar -->
