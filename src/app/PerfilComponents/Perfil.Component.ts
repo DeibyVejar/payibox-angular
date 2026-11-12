@@ -117,7 +117,7 @@ export class PerfilComponent implements OnInit {
   }
 
   // ==========================================
-  // RESTO DE LOS MÉTODOS (SIN CAMBIOS)
+  // RESTO DE LOS MÉTODOS
   // ==========================================
 
   verComprobante(pedido: any) {
@@ -186,7 +186,6 @@ export class PerfilComponent implements OnInit {
         // Actualizamos el estado tanto en el objeto local paginado como en el array principal
         pedido.status = nuevoEstado; 
         
-        // (Opcional) Sincronizar explícitamente el array principal si es necesario
         const index = this.pedidosLocales.findIndex(p => p.id === pedido.id);
         if (index !== -1) {
             this.pedidosLocales[index].status = nuevoEstado;
@@ -202,10 +201,31 @@ export class PerfilComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al actualizar:', err);
+        
+        // Extraemos el motivo exacto enviado desde el backend (Django)
+        let mensajeError = 'No se pudo actualizar el estado.';
+        
+        if (err.error) {
+          if (typeof err.error === 'string') {
+            mensajeError = err.error;
+          } else if (err.error.detail) {
+            mensajeError = err.error.detail;
+          } else if (err.error.non_field_errors) {
+            mensajeError = err.error.non_field_errors[0];
+          } else {
+            const primeraClave = Object.keys(err.error)[0];
+            if (primeraClave) {
+              const valor = err.error[primeraClave];
+              mensajeError = Array.isArray(valor) ? valor[0] : valor;
+            }
+          }
+        }
+
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'No se pudo actualizar el estado.'
+          title: 'Stock Insuficiente / Error',
+          text: mensajeError,
+          confirmButtonText: 'OK'
         });
       }
     });
