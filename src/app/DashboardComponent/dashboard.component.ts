@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
 
   resumen: any = {};
   topProductos: any[] = [];
+  otrosProductos: any[] = []; // ✨ Nueva variable para el resto del catálogo
   productosHoy: any[] = [];
   cargando: boolean = true;
 
@@ -27,7 +28,12 @@ export class DashboardComponent implements OnInit {
     this.http.get<any>('https://payiboxgym.pythonanywhere.com/api/users/dashboard-stats/').subscribe({
       next: (data) => {
         this.resumen = data.resumen || {};
-        this.topProductos = data.top_productos || [];
+        const todosLosProductos = data.top_productos || [];
+        
+        // Separamos: Los primeros 5 para el Top y el resto para la tabla inferior
+        this.topProductos = todosLosProductos.slice(0, 5);
+        this.otrosProductos = todosLosProductos.slice(5);
+
         this.productosHoy = data.productos_hoy || [];
         this.cargando = false;
       },
@@ -72,7 +78,7 @@ export class DashboardComponent implements OnInit {
     doc.text(subtituloTabla, 14, 55);
 
     // 3. Selección estricta de datos (Hoy vs Mes)
-    const dataOrigen = tipo === 'diario' ? this.productosHoy : this.topProductos;
+    const dataOrigen = tipo === 'diario' ? this.productosHoy : (this.topProductos.concat(this.otrosProductos));
     let bodyData: any[] = [];
 
     if (dataOrigen.length === 0) {

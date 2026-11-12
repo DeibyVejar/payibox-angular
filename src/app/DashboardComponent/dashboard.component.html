@@ -52,8 +52,8 @@
         </div>
       </div>
 
-      <!-- Tabla de Productos Más Vendidos -->
-      <div class="card border-0 shadow-sm rounded-3 p-4 bg-white">
+      <!-- Tabla 1: Productos Más Vendidos (TOP 5) -->
+      <div class="card border-0 shadow-sm rounded-3 p-4 bg-white mb-4">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <h5 class="fw-bold text-dark mb-0">Productos Más Vendidos</h5>
           <span class="badge bg-dark text-warning">TOP 5</span>
@@ -77,12 +77,42 @@
                 <td class="text-end fw-bold text-success">${{ item.ingresos_totales | number:'1.0-0' }} COP</td>
               </tr>
               <tr *ngIf="topProductos.length === 0">
-                <td colspan="4" class="text-center py-4 text-muted">No se registran ventas para calcular productos destacados.</td>
+                <td colspan="4" class="text-center py-4 text-muted">No se registran ventas en el top.</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      <!-- Tabla 2: Resto del Catálogo / Demás Productos -->
+      <div class="card border-0 shadow-sm rounded-3 p-4 bg-white" *ngIf="otrosProductos.length > 0">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="fw-bold text-dark mb-0">Otros Artículos del Catálogo</h5>
+          <span class="badge bg-secondary text-white">GENERAL</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-secondary">
+              <tr>
+                <th scope="col">Posición</th>
+                <th scope="col">Producto</th>
+                <th scope="col" class="text-center">Unidades Vendidas</th>
+                <th scope="col" class="text-end">Ingresos Generados</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of otrosProductos; let i = index">
+                <td><span class="badge bg-light text-dark border">#{{ i + 6 }}</span></td>
+                <td class="fw-semibold text-dark">{{ item.product__name }}</td>
+                <td class="text-center">{{ item.total_vendido }} unidades</td>
+                <td class="text-end fw-bold text-success">${{ item.ingresos_totales | number:'1.0-0' }} COP</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
   </div>
