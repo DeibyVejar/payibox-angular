@@ -23,14 +23,19 @@ export class StockComponent implements OnInit {
   // VARIABLES DE PAGINACIÓN
   // ==========================================
   public paginaActual: number = 1;
-  public itemsPorPagina: number = 5; // Cantidad de artículos por página
+  public itemsPorPagina: number = 5;
   public inventarioPaginado: any[] = [];
+
+  // ==========================================
+  // ✨ VARIABLES PARA LA EDICIÓN DE PRODUCTOS
+  // ==========================================
+  public productoSeleccionado: any = null;
+  public editForm: any = { name: '', price: 0, stock: 0, description: '', category: null };
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.obtenerInventario();
 
-      // 1. Escuchar cuando se crea un producto para refrescar la lista automáticamente
       this.productService.productoCreado$.subscribe(() => {
         this.obtenerInventario();
       });
@@ -41,7 +46,7 @@ export class StockComponent implements OnInit {
     this.productService.getProducts().pipe(take(1)).subscribe({
       next: (data) => {
         this.inventario = data;
-        this.inicializarPaginacion(); // ✨ Inicializamos la paginación al recibir datos
+        this.inicializarPaginacion();
         this.cargando = false;
       },
       error: (err) => {
@@ -69,7 +74,7 @@ export class StockComponent implements OnInit {
     if (nuevaPagina >= 1 && nuevaPagina <= this.totalPaginas) {
       this.paginaActual = nuevaPagina;
       this.actualizarVistaPaginada();
-      window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll suave
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
@@ -78,25 +83,21 @@ export class StockComponent implements OnInit {
   }
 
   // ==========================================
-  // MÉTODOS EXISTENTES
+  // MÉTODOS DE UTILIDAD Y ACCIÓN
   // ==========================================
-
-  // El método que nos faltaba para procesar los precios correctamente
   getNumero(valor: any): number {
     return parseFloat(valor) || 0;
   }
 
-  // Aumentar o disminuir stock directamente desde la tabla
   ajustarStock(item: any, cantidadCambio: number): void {
     const nuevoStock = item.stock + cantidadCambio;
     if (nuevoStock < 0) return;
 
-    // Solo enviamos los datos mínimos necesarios
     const dataActualizada = {
       name: item.name,
       price: item.price,
       stock: nuevoStock,
-      category: item.category.id // Enviamos solo el ID de la categoría
+      category: item.category?.id || item.category
     };
 
     this.productService.updateProduct(item.id, dataActualizada).pipe(take(1)).subscribe({
@@ -110,14 +111,47 @@ export class StockComponent implements OnInit {
     });
   }
 
-  // Eliminar un artículo por completo
+  // ==========================================
+  // ✨ MÉTODOS NUEVOS PARA EDITAR PRODUCTO
+  // ==========================================
+  abrirEdicion(producto: any) {
+    this.productoSeleccionado = producto;
+    this.editForm = {
+      name: producto.name,
+      price: producto.price,
+      stock: producto.stock,
+      description: producto.description || '',
+      category: producto.category?.id || producto.category
+    };
+  }
+
+  guardarCambiosEdicion() {
+    if (!this.productoSeleccionado) return;
+
+    this.productService.updateProduct(this.productoSeleccionado.id, this.editForm).pipe(take(1)).subscribe({
+      next: (res) => {
+        // Actualizamos de forma reactiva el elemento en el inventario local
+        const index = this.inventario.findIndex(item => item.id === this.productoSeleccionado.id);
+        if (index !== -1) {
+          this.inventario[index] = { ...this.inventario[index], ...res };
+          this.actualizarVistaPaginada();
+        }
+        this.productoSeleccionado = null;
+        alert('¡Artículo modificado con éxito!');
+      },
+      error: (err) => {
+        console.error('Error al actualizar producto:', err);
+        alert('No se pudo actualizar el artículo.');
+      }
+    });
+  }
+
   eliminarItem(id: number): void {
     if (confirm('¿Estás seguro de que deseas eliminar este producto de Payibox?')) {
       this.productService.deleteProduct(id).pipe(take(1)).subscribe({
         next: () => {
           this.inventario = this.inventario.filter(item => item.id !== id);
           
-          // ✨ Ajustamos la paginación si se elimina el último elemento de la página
           if (this.inventarioPaginado.length === 1 && this.paginaActual > 1) {
             this.paginaActual--;
           }

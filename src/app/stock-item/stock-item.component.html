@@ -36,7 +36,7 @@
         <div class="row align-items-center">
 
           <!-- Imagen, Nombre y Badge de Estado -->
-          <div class="col-12 col-md-5 d-flex align-items-center mb-3 mb-md-0">
+          <div class="col-12 col-md-4 d-flex align-items-center mb-3 mb-md-0">
             <img [src]="item.image || 'assets/cart-placeholder.png'"
               class="rounded-3 me-3 border border-light-subtle shadow-sm"
               style="width: 55px; height: 55px; object-fit: cover;">
@@ -63,8 +63,14 @@
             </div>
           </div>
 
-          <!-- Botón de Eliminar -->
-          <div class="col-6 col-md-3 text-end">
+          <!-- Botones de Acción (Editar y Eliminar) -->
+          <div class="col-6 col-md-4 text-end d-flex justify-content-end align-items-center gap-3">
+            <button (click)="abrirEdicion(item)"
+              class="btn btn-sm btn-outline-dark fw-semibold px-2 py-1 shadow-sm"
+              data-bs-toggle="modal" data-bs-target="#modalEditar">
+              <i class="bi bi-pencil-square me-1"></i> Editar
+            </button>
+            
             <button (click)="eliminarItem(item.id)"
               class="btn-delete-minimal text-danger bg-transparent border-0 fw-semibold p-0">
               <i class="bi bi-trash3-fill me-1"></i> Eliminar
@@ -110,5 +116,41 @@
       
     </div>
 
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL DE EDICIÓN DE ARTÍCULOS              -->
+<!-- ========================================== -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-white border-0 shadow-lg">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title fw-bold">Editar Artículo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="productoSeleccionado">
+        <div class="mb-3">
+          <label class="form-label fw-bold text-dark small">Nombre del Producto</label>
+          <input type="text" class="form-control" [(ngModel)]="editForm.name" name="name">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold text-dark small">Precio (COP)</label>
+          <input type="number" class="form-control" [(ngModel)]="editForm.price" name="price">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold text-dark small">Stock Disponible</label>
+          <input type="number" class="form-control" [(ngModel)]="editForm.stock" name="stock">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold text-dark small">Descripción</label>
+          <textarea class="form-control" rows="3" [(ngModel)]="editForm.description" name="description"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer border-0 bg-light">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning fw-bold btn-sm text-dark px-3" (click)="guardarCambiosEdicion()" data-bs-dismiss="modal">Guardar Cambios</button>
+      </div>
+    </div>
   </div>
 </div>
